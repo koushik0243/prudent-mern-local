@@ -1,0 +1,291 @@
+/* :root {
+  --heading: #393a56;
+  --text: #464646;
+  --theme: #fe5402;
+  --bg: #fff;
+} */
+
+/* Unified button style */
+.form-actions .btn-primary,
+.form-actions .btn-secondary,
+.form-actions .btn-red-primary,
+.form-actions button.btn-red-primary,
+.btn-back {
+        height: 40px !important;
+        background: #fff !important;
+        color: #495057 !important;
+        border: 2px solid #e9ecef !important;
+        box-shadow: none !important;
+}
+
+.form-actions .btn-primary:hover:not(:disabled),
+.form-actions .btn-secondary:hover:not(:disabled),
+.form-actions .btn-red-primary:hover:not(:disabled),
+.form-actions button.btn-red-primary:hover:not(:disabled),
+.btn-back:hover:not(:disabled) {
+        background: #b6110f !important;
+        color: #fff !important;
+        border-color: #b6110f !important;
+        transform: none !important;
+}
+
+
+/* Header */
+.login {
+    background-color: var(--bg);
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    overflow-y: hidden;
+}
+
+.login_left {
+    background: linear-gradient(-40deg, #e55812 40%, #ffffff 140%);
+    width: 45vw;
+    height: 100vh;
+}
+
+.login_form_heading {
+    margin-top: -20px;
+}
+
+.brand_logo img {
+    height: 120px;
+
+}
+
+.login_left_header {
+    height: 25vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login_left_header h1 {
+    color: #fff;
+}
+
+.login_right {
+    margin: auto;
+}
+
+.login_form {
+    width: 40vw;
+    /* height: 80vh; */
+    height: 86vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* justify-content: flex-start; */
+    gap: 1.5rem;
+}
+
+.textField,
+.password_textField {
+    width: 65%;
+}
+
+.password_textField {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password_textField input {
+    width: 100%;
+    padding-right: 2.5rem;
+    /* Adjust padding to make space for the icon */
+}
+
+.icon {
+    position: absolute;
+    right: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.button,
+.forgot_button {
+    width: 65%;
+}
+
+.google_button {
+    width: 65%;
+}
+
+.button button {
+    width: 100%;
+    background-color: var(--theme);
+    color: #fff;
+    border: none;
+    height: 4vh;
+    padding: 1.5rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 400;
+}
+
+.google_button button {
+    width: 100%;
+    background-color: var(--bg);
+    color: var(--theme);
+    border: 0.5px solid var(--theme);
+    height: 4vh;
+    padding: 1.5rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.google_button button img {
+    margin-left: 1rem;
+    width: 1rem;
+}
+
+.line {
+    display: flex;
+    align-items: center;
+    width: 65%;
+}
+
+.border_left,
+.border_right {
+    border: 0.2px solid #e5e7eb;
+    width: 100%;
+}
+
+.line_or {
+    font-size: small;
+    padding: 0 10px;
+}
+
+.ellipses {
+    position: relative;
+    height: 100%;
+}
+
+.ellipses_main {
+    /* background-color: pink; */
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: flex-end;
+    position: absolute;
+    /* or fixed */
+    bottom: 25%;
+}
+
+.ellipses_main img {
+    opacity: 0.5;
+}
+
+.ellipses_small {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: flex-end;
+    position: absolute;
+    /* or fixed */
+    bottom: 33%;
+    right: 12%;
+}
+
+.ellipses_small {
+    opacity: 0.7;
+}
+
+.signup_option {
+    cursor: pointer;
+    margin-left: 0.5rem;
+}
+
+.signup_option:hover {
+    text-decoration: underline;
+}
+
+.forgot_password {
+    color: #000;
+}
+
+.forgot_password a:hover {
+    text-decoration: underline;
+}
+
+.forgot_password a {
+    color: var(--theme);
+    margin-left: 0.5rem;
+}
+
+.dont_have_account {
+    text-align: center;
+}
+
+.close_button {
+    border: none;
+    cursor: pointer;
+    background-color: #f9eee9;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+}
+
+/* Form Input Styles */
+.textField input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.textField input:focus {
+    border-color: var(--theme);
+}
+
+.textField label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+    font-weight: 500;
+}
+
+/* Error Styles */
+.error_input {
+    border-color: #ef4444 !important;
+}
+
+.error_text {
+    color: #ef4444;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: block;
+}
+
+/* Button disabled state */
+.button button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Login form heading */
+.login_form_heading h2 {
+    color: var(--heading);
+    margin-bottom: 0.5rem;
+    font-size: 2rem;
+}
+
+.login_form_heading p {
+    color: var(--text);
+    margin-bottom: 1rem;
+}

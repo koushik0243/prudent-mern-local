@@ -1,0 +1,327 @@
+/* Edit User Page Styles - Matches Edit Contact Layout */
+
+.show-contact-container {
+    width: 100%;
+    padding: 1.25rem;
+    background: #f8f9fa;
+    min-height: calc(100vh - 55px);
+}
+
+.show-contact-header {
+    margin-bottom: 0.85rem;
+}
+
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: white;
+    border: 2px solid #e9ecef;
+    padding: 0.42rem 0.9rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.86rem;
+    line-height: 1;
+    color: #495057;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-bottom: 0.55rem;
+}
+
+.btn-back:hover {
+    border-color: #b6110f;
+    background-color: #b6110f;
+    color: #fff;
+    transform: translateX(-4px);
+}
+
+.page-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 0.15rem;
+}
+
+.page-subtitle {
+    color: #6c757d;
+    font-size: 0.88rem;
+    margin: 0;
+}
+
+.contact-form {
+    width: 100%;
+}
+
+.contact-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    padding: 1rem;
+}
+
+.form-section {
+    margin-bottom: 1rem;
+}
+
+.section-title {
+    font-size: 1.02rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 0.6rem;
+    display: flex;
+    align-items: center;
+}
+
+.section-divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(to right, #000, #000, transparent);
+    margin: 0.95rem 0;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.65rem;
+    margin-bottom: 0.65rem;
+}
+
+.form-group {
+    margin-bottom: 0.6rem;
+}
+
+.form-label {
+    display: block;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 0.3rem;
+    font-size: 0.82rem;
+}
+
+.required {
+    color: #dc3545;
+    margin-left: 0.25rem;
+}
+
+.form-input {
+    width: 100%;
+    height: 34px;
+    padding: 0.34rem 0.72rem;
+    border: 2px solid #e9ecef;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    line-height: 1.2;
+    color: #212529;
+    background: #fff;
+    transition: all 0.2s ease;
+}
+
+select.form-input {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%236c757d' d='M1.41.59 6 5.17 10.59.59 12 2l-6 6-6-6z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.7rem center;
+    background-size: 12px 8px;
+    padding-right: 2rem;
+}
+
+select.form-input::-ms-expand {
+    display: none;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #b6110f;
+    box-shadow: 0 0 0 0.2rem rgba(182, 17, 15, 0.1);
+}
+
+.form-input.error {
+    border-color: #dc3545;
+}
+
+.form-input:disabled {
+    background-color: #f8f9fa;
+    cursor: not-allowed;
+}
+
+.error-text {
+    display: block;
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+}
+
+textarea.form-input {
+    resize: vertical;
+    min-height: 78px;
+    height: auto;
+}
+
+/* Date picker specific styling */
+.form-input[type="date"] {
+    position: relative;
+    cursor: pointer;
+    color: #495057;
+}
+
+.form-input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 0.25rem;
+    opacity: 1;
+    filter: invert(0) brightness(0);
+    transition: all 0.2s ease;
+}
+
+.form-input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 0.8;
+    filter: invert(0) brightness(0) sepia(1) saturate(10000%) hue-rotate(-10deg);
+    transform: scale(1.1);
+}
+
+.form-input[type="date"]::-webkit-datetime-edit-text {
+    padding: 0 0.25rem;
+}
+
+.form-input[type="date"]::-webkit-datetime-edit {
+    padding: 0;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.65rem;
+    margin-top: 0.95rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid #f1f3f5;
+}
+
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.34rem 0.95rem;
+    height: 34px;
+    background: #b6110f;
+    color: white;
+    border: 1px solid #b6110f;
+    border-radius: 6px;
+    font-size: 0.86rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(182, 17, 15, 0.2);
+    min-width: 140px;
+    justify-content: center;
+}
+
+.btn-primary:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(182, 17, 15, 0.4);
+}
+
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.34rem 0.95rem;
+    height: 34px;
+    background: white;
+    color: #495057;
+    border: 2px solid #e9ecef;
+    border-radius: 6px;
+    font-size: 0.86rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 110px;
+    justify-content: center;
+}
+
+.btn-secondary:hover:not(:disabled) {
+    border-color: #b6110f;
+    color: #b6110f;
+}
+
+.btn-secondary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Loading State */
+.loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    text-align: center;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.spinner-border {
+    width: 3rem;
+    height: 3rem;
+    border: 0.3em solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spinner-border 0.75s linear infinite;
+    color: #b6110f;
+}
+
+@keyframes spinner-border {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.spinner-border-sm {
+    width: 1rem;
+    height: 1rem;
+    border-width: 0.2em;
+}
+
+.loading-state p {
+    margin-top: 20px;
+    color: #6c757d;
+    font-size: 16px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .show-contact-container {
+        padding: 1rem;
+    }
+
+    .page-title {
+        font-size: 1.2rem;
+    }
+
+    .contact-card {
+        padding: 0.85rem;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0.6rem;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        width: 100%;
+    }
+}

@@ -1,0 +1,25 @@
+/* Dashboard specific styles can go here if needed */
+
+/* Unified button style */
+.form-actions .btn-primary,
+.form-actions .btn-secondary,
+.form-actions .btn-red-primary,
+.form-actions button.btn-red-primary,
+.btn-back {
+	height: 40px !important;
+	background: #fff !important;
+	color: #495057 !important;
+	border: 2px solid #e9ecef !important;
+	box-shadow: none !important;
+}
+
+.form-actions .btn-primary:hover:not(:disabled),
+.form-actions .btn-secondary:hover:not(:disabled),
+.form-actions .btn-red-primary:hover:not(:disabled),
+.form-actions button.btn-red-primary:hover:not(:disabled),
+.btn-back:hover:not(:disabled) {
+	background: #b6110f !important;
+	color: #fff !important;
+	border-color: #b6110f !important;
+	transform: none !important;
+}

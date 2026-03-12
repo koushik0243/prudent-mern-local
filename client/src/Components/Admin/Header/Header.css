@@ -1,0 +1,397 @@
+/* Unified button style */
+.form-actions .btn-primary,
+.form-actions .btn-secondary,
+.form-actions .btn-red-primary,
+.form-actions button.btn-red-primary,
+.btn-back {
+    height: 40px !important;
+    background: #fff !important;
+    color: #495057 !important;
+    border: 2px solid #e9ecef !important;
+    box-shadow: none !important;
+}
+
+.form-actions .btn-primary:hover:not(:disabled),
+.form-actions .btn-secondary:hover:not(:disabled),
+.form-actions .btn-red-primary:hover:not(:disabled),
+.form-actions button.btn-red-primary:hover:not(:disabled),
+.btn-back:hover:not(:disabled) {
+    background: #b6110f !important;
+    color: #fff !important;
+    border-color: #b6110f !important;
+    transform: none !important;
+}
+
+.header {
+    background-color: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 1rem 1.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 997;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    overflow: visible;
+}
+
+.header .container-fluid {
+    padding: 0;
+    max-width: 100%;
+    margin: 0;
+    overflow: visible;
+}
+
+.header .row {
+    margin: 0;
+    overflow: visible;
+}
+
+.header .col-auto {
+    overflow: visible;
+}
+
+.header .logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 230px;
+    min-width: 230px;
+    gap: 0;
+}
+
+.header .logo h1 {
+    margin: 0;
+    width: 100%;
+    text-align: center !important;
+}
+
+.header .auth-logo {
+    height: auto;
+    width: auto;
+    max-width: 100%;
+}
+
+.bar-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.sidebar-toggle-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1e293b;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 0.375rem;
+    font-size: 1.25rem;
+}
+
+.sidebar-toggle-btn:hover {
+    background-color: #e2e8f0;
+    color: #0f172a;
+}
+
+.sidebar-toggle-btn:active {
+    background-color: #cbd5e1;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    overflow: visible;
+}
+
+.header-right ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 1rem;
+    overflow: visible;
+}
+
+.header-right ul li {
+    display: flex;
+    align-items: center;
+    overflow: visible;
+}
+
+.header-icon-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: #1e293b;
+    text-decoration: none;
+}
+
+.header-icon-btn:hover {
+    background-color: #e2e8f0;
+    color: #0f172a;
+}
+
+.header-icon-btn:active {
+    background-color: #cbd5e1;
+}
+
+.header-icon-btn img {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+/* User Dropdown Styles */
+.user-dropdown-container {
+    position: relative;
+}
+
+.header .user-dropdown-menu {
+    position: absolute !important;
+    top: calc(100% + 10px) !important;
+    right: 0 !important;
+    background: white !important;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    min-width: 180px;
+    z-index: 9999 !important;
+    overflow: visible;
+    padding: 8px 0;
+    display: block !important;
+}
+
+.header .dropdown-item {
+    display: block !important;
+    width: 100%;
+    padding: 12px 20px;
+    text-align: left;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333 !important;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.header .dropdown-item:hover {
+    background-color: #f8f9fa !important;
+    color: #b6110f !important;
+}
+
+.header .dropdown-item:active {
+    background-color: #e9ecef !important;
+}
+
+.header .notification-dropdown-container {
+    position: relative;
+}
+
+.header .notification-icon-btn {
+    position: relative;
+}
+
+.header .notification-badge {
+    position: absolute;
+    top: 0;
+    right: -2px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 999px;
+    background: #b6110f;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 18px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(182, 17, 15, 0.35);
+}
+
+.header .notification-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    width: 340px;
+    max-height: 420px;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 12px;
+    background: #fff !important;
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.18) !important;
+    z-index: 99999 !important;
+    overflow: hidden;
+}
+
+.header .notification-dropdown-menu,
+.header .notification-dropdown-menu * {
+    box-sizing: border-box;
+}
+
+.header .notification-dropdown-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    border-bottom: 1px solid #eef2f7;
+    background: linear-gradient(180deg, #fbfdff 0%, #f6f9fc 100%) !important;
+}
+
+.header .notification-dropdown-header h4 {
+    margin: 0 !important;
+    color: #0f172a !important;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.header .notification-dropdown-header p {
+    margin: 4px 0 0 !important;
+    color: #64748b !important;
+    font-size: 11px;
+    line-height: 1.3;
+}
+
+.header .notification-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px 9px;
+    border-radius: 999px;
+    background: #fee2e2;
+    color: #991b1b;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+}
+
+.header .notification-dropdown-body {
+    max-height: 340px;
+    overflow-y: auto;
+    background: #fff;
+}
+
+.header .notification-empty-state {
+    min-height: 100px;
+    padding: 16px 12px;
+    color: #64748b !important;
+    font-size: 12px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.header .notification-item {
+    width: 100%;
+    border: none !important;
+    background: #fff !important;
+    appearance: none;
+    -webkit-appearance: none;
+    display: flex;
+    gap: 10px;
+    padding: 10px 12px;
+    text-align: left;
+    cursor: pointer;
+    border-bottom: 1px solid #f1f5f9;
+    transition: background-color 0.2s ease;
+    color: #0f172a !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+}
+
+.header .notification-item:hover {
+    background: #f8fafc;
+}
+
+.header .notification-item-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: #fee2e2;
+    color: #b6110f;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.header .notification-item-content {
+    min-width: 0;
+    flex: 1;
+}
+
+.header .notification-item-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+}
+
+.header .notification-item-title-row strong {
+    flex: 1;
+    min-width: 0;
+    color: #0f172a !important;
+    font-size: 12px;
+    line-height: 1.25;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.header .notification-time {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: #475569 !important;
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+.header .notification-item-contact {
+    margin: 2px 0 0 !important;
+    color: #1e293b !important;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.header .notification-item-description {
+    margin: 4px 0 0 !important;
+    color: #64748b !important;
+    font-size: 11px;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+@media (max-width: 640px) {
+    .header .notification-dropdown-menu {
+        right: -78px;
+        width: min(92vw, 340px);
+    }
+}
+
+@media (max-width: 990px) {
+    .header .logo {
+        width: auto;
+        min-width: 0;
+        padding-right: 2rem;
+    }
+
+    .header .logo h1 {
+        text-align: left !important;
+    }
+}
