@@ -347,9 +347,10 @@
 }
 
 .contacts-table td {
-    padding: 0.34rem 0.65rem;
+    padding: 0.26rem 0.5rem;
     color: #495057;
-    font-size: 0.84rem;
+    font-size: 0.8rem;
+    line-height: 1.2;
 }
 
 .contacts-table input[type="checkbox"] {
@@ -746,7 +747,7 @@
 
     .contacts-table th,
     .contacts-table td {
-        padding: 0.5rem 0.45rem;
+        padding: 0.38rem 0.35rem;
     }
 
     .table-footer {

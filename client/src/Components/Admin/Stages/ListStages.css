@@ -193,11 +193,11 @@
 }
 
 .contacts-table th {
-    padding: 0.4rem 0.65rem;
+    padding: 0.3rem 0.5rem;
     text-align: left;
     font-weight: 600;
     color: #495057;
-    font-size: 0.8rem;
+    font-size: 0.74rem;
     text-transform: uppercase;
     letter-spacing: 0.35px;
 }
@@ -212,9 +212,10 @@
 }
 
 .contacts-table td {
-    padding: 0.34rem 0.65rem;
+    padding: 0.2rem 0.4rem;
     color: #495057;
-    font-size: 0.84rem;
+    font-size: 0.76rem;
+    line-height: 1.15;
 }
 
 .contacts-table input[type="checkbox"] {
@@ -618,7 +619,7 @@
 
     .contacts-table th,
     .contacts-table td {
-        padding: 0.5rem 0.45rem;
+        padding: 0.28rem 0.3rem;
     }
 
     .table-footer {

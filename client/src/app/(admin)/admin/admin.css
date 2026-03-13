@@ -535,9 +535,9 @@ select.filter-select {
 
 .contacts-table th,
 .users-table th {
-    padding: 0.72rem 0.8rem !important;
+    padding: 0.5rem 0.7rem !important;
     color: #5a6472 !important;
-    font-size: 0.95rem !important;
+    font-size: 0.88rem !important;
     font-weight: 700 !important;
     text-transform: none !important;
     letter-spacing: 0 !important;
@@ -546,12 +546,14 @@ select.filter-select {
 }
 
 .contacts-table td,
-.users-table td {
-    padding: 0.66rem 0.8rem !important;
+.users-table td,
+.modern-table td {
+    padding: 0.38rem 0.65rem !important;
     color: #4b5563 !important;
-    font-size: 0.94rem !important;
+    font-size: 0.84rem !important;
     border-bottom: 1px solid #e4e9f1 !important;
     vertical-align: middle;
+    line-height: 1.25 !important;
 }
 
 .contacts-table tbody tr:nth-child(odd),

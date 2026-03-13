@@ -1047,12 +1047,6 @@ const Messages = () => {
                     {/* Action Tabs */}
                     <div className="sidebar-tabs">
                         <button
-                            className={`sidebar-tab ${activeTab === 'message' ? 'active' : ''}`}
-                            onClick={() => setActiveTab(activeTab === 'message' ? '' : 'message')}
-                        >
-                            Send message
-                        </button>
-                        <button
                             className={`sidebar-tab ${activeTab === 'note' ? 'active' : ''}`}
                             onClick={() => setActiveTab(activeTab === 'note' ? '' : 'note')}
                         >
