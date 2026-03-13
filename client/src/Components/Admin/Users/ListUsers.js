@@ -41,10 +41,11 @@ const ListUsers = () => {
         if (loading || lastFetchedAt > 0) return;
 
         const loadUsers = async () => {
-            try {
-                await dispatch(fetchUsers()).unwrap();
-            } catch (err) {
-                console.error('Error loading users:', err);
+            const resultAction = await dispatch(fetchUsers());
+
+            // Ignore expected condition-aborts (already loading or TTL hit).
+            if (fetchUsers.rejected.match(resultAction) && !resultAction.meta?.condition) {
+                console.error('Error loading users:', resultAction.payload || resultAction.error?.message);
             }
         };
         loadUsers();

@@ -32,10 +32,11 @@ const ListStages = () => {
         if (loading || lastFetchedAt > 0) return;
 
         const loadStages = async () => {
-            try {
-                await dispatch(fetchStages()).unwrap();
-            } catch (err) {
-                console.error('Error loading stages:', err);
+            const resultAction = await dispatch(fetchStages());
+
+            // Ignore expected condition-aborts (already loading or TTL hit).
+            if (fetchStages.rejected.match(resultAction) && !resultAction.meta?.condition) {
+                console.error('Error loading stages:', resultAction.payload || resultAction.error?.message);
             }
         };
         loadStages();

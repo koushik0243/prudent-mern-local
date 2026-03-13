@@ -28,6 +28,7 @@
     padding: 1.25rem;
     background: #f8f9fa;
     min-height: calc(100vh - 55px);
+    margin-top: 50px;
 }
 
 .contacts-header {

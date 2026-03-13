@@ -24,10 +24,11 @@ const ListCountries = () => {
         if (loading || lastFetchedAt > 0) return;
 
         const loadCountries = async () => {
-            try {
-                await dispatch(fetchCountries()).unwrap();
-            } catch (err) {
-                console.error('Error loading countries:', err);
+            const resultAction = await dispatch(fetchCountries());
+
+            // Ignore expected condition-aborts (TTL hit or in-flight request).
+            if (fetchCountries.rejected.match(resultAction) && !resultAction.meta?.condition) {
+                console.error('Error loading countries:', resultAction.payload || resultAction.error?.message);
             }
         };
         loadCountries();

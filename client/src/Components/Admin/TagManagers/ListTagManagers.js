@@ -24,10 +24,11 @@ const ListTagManagers = () => {
         if (loading || lastFetchedAt > 0) return;
 
         const loadTagManagers = async () => {
-            try {
-                await dispatch(fetchTagManagers()).unwrap();
-            } catch (err) {
-                console.error('Error loading tag managers:', err);
+            const resultAction = await dispatch(fetchTagManagers());
+
+            // Ignore expected condition-aborts (already loading or TTL hit).
+            if (fetchTagManagers.rejected.match(resultAction) && !resultAction.meta?.condition) {
+                console.error('Error loading tag managers:', resultAction.payload || resultAction.error?.message);
             }
         };
         loadTagManagers();

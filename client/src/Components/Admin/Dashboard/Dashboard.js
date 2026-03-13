@@ -649,7 +649,7 @@ const Dashboard = () => {
         <div className="contact-leads2-container">
             <div className="contact-leads2-header">
                 <div className="contact-leads2-header-top">
-                    <h1 className="page-title">Stage Dashboard</h1>
+                    <h1 className="page-title">Dashboard</h1>
                 </div>
                 <p className="page-subtitle">Track leads across all stages</p>
             </div>
