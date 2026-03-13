@@ -171,11 +171,10 @@ export const fetchUsers = createAsyncThunk(
   {
     condition: (_, { getState }) => {
       const { user } = getState();
-      const hasData = Array.isArray(user?.users) && user.users.length > 0;
-      const isFresh = hasData && (Date.now() - (user.lastFetchedAt || 0) < USER_LIST_TTL_MS);
+      const hasFetchedRecently = Date.now() - (user?.lastFetchedAt || 0) < USER_LIST_TTL_MS;
 
       if (user?.loading) return false;
-      if (isFresh) return false;
+      if (hasFetchedRecently) return false;
       return true;
     },
   }

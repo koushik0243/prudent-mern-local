@@ -11,7 +11,7 @@ import './ListStages.css';
 const ListStages = () => {
     const router = useRouter();
     const dispatch = useAppDispatch();
-    const { stages, loading, error } = useAppSelector((state) => state.stages);
+    const { stages, loading, error, lastFetchedAt } = useAppSelector((state) => state.stages);
 
     const stagesArray = Array.isArray(stages) ? stages : [];
     const sortOrderOptions = useMemo(
@@ -29,7 +29,7 @@ const ListStages = () => {
     const [savingSortOrderMap, setSavingSortOrderMap] = useState({});
 
     useEffect(() => {
-        if (loading || (Array.isArray(stages) && stages.length > 0)) return;
+        if (loading || lastFetchedAt > 0) return;
 
         const loadStages = async () => {
             try {
@@ -39,7 +39,7 @@ const ListStages = () => {
             }
         };
         loadStages();
-    }, [dispatch, stages, loading]);
+    }, [dispatch, loading, lastFetchedAt]);
 
     useEffect(() => {
         if (error) {
@@ -397,7 +397,7 @@ const ListStages = () => {
                 ) : filteredStages.length === 0 ? (
                     <div className="empty-state">
                         <FaLayerGroup className="empty-icon" />
-                        <h3>No stages found</h3>
+                        <h3>No record found</h3>
                         <p>
                             {searchTerm
                                 ? 'Try adjusting your search terms'
@@ -457,7 +457,7 @@ const ListStages = () => {
                                             </td>
                                             <td>{stage.desc || 'N/A'}</td>
                                             <td>
-                                                <span className={`status-badge ${stage.status === 'active' ? 'status-active' : 'status-inactive'}`}>
+                                                <span className={`status-badge ${(stage.status || '').toLowerCase() === 'active' ? 'active' : 'inactive'}`}>
                                                     {stage.status || 'N/A'}
                                                 </span>
                                             </td>

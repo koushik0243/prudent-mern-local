@@ -22,11 +22,10 @@ export const fetchStages = createAsyncThunk(
   {
     condition: (_, { getState }) => {
       const { stages } = getState();
-      const hasData = Array.isArray(stages?.stages) && stages.stages.length > 0;
-      const isFresh = hasData && (Date.now() - (stages.lastFetchedAt || 0) < STAGE_LIST_TTL_MS);
+      const hasFetchedRecently = Date.now() - (stages?.lastFetchedAt || 0) < STAGE_LIST_TTL_MS;
 
       if (stages?.loading) return false;
-      if (isFresh) return false;
+      if (hasFetchedRecently) return false;
       return true;
     },
   }

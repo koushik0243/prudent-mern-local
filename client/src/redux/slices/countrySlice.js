@@ -21,11 +21,10 @@ export const fetchCountries = createAsyncThunk(
   {
     condition: (_, { getState }) => {
       const { country } = getState();
-      const hasData = Array.isArray(country?.countries) && country.countries.length > 0;
-      const isFresh = hasData && (Date.now() - (country.lastFetchedAt || 0) < COUNTRY_LIST_TTL_MS);
+      const hasFetchedRecently = Date.now() - (country?.lastFetchedAt || 0) < COUNTRY_LIST_TTL_MS;
 
       if (country?.loading) return false;
-      if (isFresh) return false;
+      if (hasFetchedRecently) return false;
       return true;
     },
   }

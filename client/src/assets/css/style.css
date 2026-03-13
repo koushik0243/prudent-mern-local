@@ -318,16 +318,17 @@ select {
   }
 }
 .wrapper {
-  margin-top: 49px;
+  /* margin-top: 49px; */
 }
 
 .header {
-  background-color: #23549d;
+  /* background-color: #23549d; */
   padding: 2px 15px;
   position: fixed;
   width: 100%;
-  z-index: 9999;
+  /* z-index: 9999; */
   top: 0;
+  border-bottom: none !important;
 }
 .header .logo {
   display: flex;
@@ -375,6 +376,7 @@ select {
   overflow-x: hidden;
   background: #222222;
   transition: all 0.5s ease;
+  top: 0;
 }
 
 #wrapper.toggled #sidebar-wrapper {

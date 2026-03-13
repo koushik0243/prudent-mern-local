@@ -12,7 +12,7 @@ import '../TagManagers/ListTagManagers.css';
 const ListStates = () => {
     const router = useRouter();
     const dispatch = useAppDispatch();
-    const { states, loading, error } = useAppSelector((state) => state.stateMaster);
+    const { states, loading, error, lastFetchedAt } = useAppSelector((state) => state.stateMaster);
     const { countries, error: countryError } = useAppSelector((state) => state.country);
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -28,7 +28,7 @@ const ListStates = () => {
     }, [dispatch, countries]);
 
     useEffect(() => {
-        if (!selectedCountryId || (Array.isArray(states) && states.length > 0)) return;
+        if (!selectedCountryId || loading || lastFetchedAt > 0) return;
 
         const loadStates = async () => {
             try {
@@ -39,7 +39,7 @@ const ListStates = () => {
         };
 
         loadStates();
-    }, [dispatch, selectedCountryId, states]);
+    }, [dispatch, selectedCountryId, loading, lastFetchedAt]);
 
     useEffect(() => {
         if (error) {
@@ -349,7 +349,7 @@ const ListStates = () => {
                 ) : filteredStates.length === 0 ? (
                     <div className="empty-state">
                         <FaMapMarkedAlt className="empty-icon" />
-                        <h3>No states found</h3>
+                        <h3>No record found</h3>
                         <p>No states are available for the selected country.</p>
                         <button className="btn-primary" onClick={handleCreateClick}>
                             <FaPlus /> Add Your First State

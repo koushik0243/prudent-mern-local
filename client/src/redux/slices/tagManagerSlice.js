@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import apiServiceHandler from '../../service/apiService';
 
+const TAG_MANAGER_LIST_TTL_MS = 5 * 60 * 1000;
+
 // Async thunk for fetching tag managers
 export const fetchTagManagers = createAsyncThunk(
   'tagManager/fetchTagManagers',
@@ -16,6 +18,16 @@ export const fetchTagManagers = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message || 'Failed to fetch tag managers');
     }
+  },
+  {
+    condition: (_, { getState }) => {
+      const { tagManager } = getState();
+      const hasFetchedRecently = Date.now() - (tagManager?.lastFetchedAt || 0) < TAG_MANAGER_LIST_TTL_MS;
+
+      if (tagManager?.loading) return false;
+      if (hasFetchedRecently) return false;
+      return true;
+    },
   }
 );
 
@@ -89,6 +101,7 @@ export const fetchTagManagerById = createAsyncThunk(
 const initialState = {
   tagManagers: [],
   currentTagManager: null,
+  lastFetchedAt: 0,
   loading: false,
   error: null,
 };
@@ -114,6 +127,7 @@ const tagManagerSlice = createSlice({
       .addCase(fetchTagManagers.fulfilled, (state, action) => {
         state.loading = false;
         state.tagManagers = action.payload;
+        state.lastFetchedAt = Date.now();
       })
       .addCase(fetchTagManagers.rejected, (state, action) => {
         state.loading = false;
@@ -127,6 +141,7 @@ const tagManagerSlice = createSlice({
       .addCase(createTagManager.fulfilled, (state, action) => {
         state.loading = false;
         state.tagManagers.push(action.payload);
+        state.lastFetchedAt = Date.now();
       })
       .addCase(createTagManager.rejected, (state, action) => {
         state.loading = false;
@@ -145,6 +160,7 @@ const tagManagerSlice = createSlice({
         if (index !== -1) {
           state.tagManagers[index] = action.payload;
         }
+        state.lastFetchedAt = Date.now();
       })
       .addCase(updateTagManager.rejected, (state, action) => {
         state.loading = false;
@@ -160,6 +176,7 @@ const tagManagerSlice = createSlice({
         state.tagManagers = state.tagManagers.filter(
           tag => (tag._id || tag.id) !== action.payload
         );
+        state.lastFetchedAt = Date.now();
       })
       .addCase(deleteTagManager.rejected, (state, action) => {
         state.loading = false;

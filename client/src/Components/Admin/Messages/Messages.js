@@ -11,8 +11,11 @@ import { fetchCountries } from '@/redux/slices/countrySlice';
 import { fetchStates } from '@/redux/slices/stateSlice';
 import { fetchCities } from '@/redux/slices/citySlice';
 import { FaArrowLeft, FaEnvelope, FaPhone, FaBuilding, FaMapMarkerAlt, FaUser, FaGlobe } from 'react-icons/fa';
+import { jwtDecode } from 'jwt-decode';
 import toast from 'react-hot-toast';
 import apiServiceHandler from '@/service/apiService';
+import { fetchContactMails } from '@/redux/slices/contactMailSlice';
+import { createContactMailSend } from '@/redux/slices/contactMailSendSlice';
 import './Messages.css';
 
 const Messages = () => {
@@ -28,12 +31,13 @@ const Messages = () => {
     const { countries } = useAppSelector((state) => state.country);
     const { states } = useAppSelector((state) => state.stateMaster);
     const { cities } = useAppSelector((state) => state.cityMaster);
+    const { contactMails } = useAppSelector((state) => state.contactMail);
     
     const [activeStage, setActiveStage] = useState('');
     const [previousStage, setPreviousStage] = useState('');
     const [messageText, setMessageText] = useState('');
     const [noteText, setNoteText] = useState('');
-    const [activeTab, setActiveTab] = useState(''); // message, note, schedule
+    const [activeTab, setActiveTab] = useState(''); // message, note, schedule, send-mail
     const [activityType, setActivityType] = useState('Call');
     const [activityDateTime, setActivityDateTime] = useState('');
     const [activityDescription, setActivityDescription] = useState('');
@@ -42,6 +46,16 @@ const Messages = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [pendingStageId, setPendingStageId] = useState('');
     const [showStageConfirm, setShowStageConfirm] = useState(false);
+    const [isSectionPersonalOpen, setIsSectionPersonalOpen] = useState(false);
+    const [isSectionAddressOpen, setIsSectionAddressOpen] = useState(false);
+    const [isSectionOrgOpen, setIsSectionOrgOpen] = useState(false);
+    const [isSectionQAOpen, setIsSectionQAOpen] = useState(false);
+    const [isSectionAdditionalOpen, setIsSectionAdditionalOpen] = useState(false);
+
+    const [sendMailUserId, setSendMailUserId] = useState('');
+    const [sendMailFormData, setSendMailFormData] = useState({ mail_id: '', subject: '', message: '' });
+    const [sendMailErrors, setSendMailErrors] = useState({});
+    const [isSendMailSubmitting, setIsSendMailSubmitting] = useState(false);
 
     const normalizeId = (value) => {
         if (!value) return '';
@@ -250,6 +264,67 @@ const Messages = () => {
         }
 
         return `${diffDays} days ago`;
+    };
+
+    useEffect(() => {
+        if (!Array.isArray(contactMails) || contactMails.length === 0) {
+            dispatch(fetchContactMails());
+        }
+        const token = localStorage.getItem('adminToken');
+        if (token) {
+            try {
+                const decoded = jwtDecode(token);
+                if (decoded?._id) setSendMailUserId(decoded._id);
+            } catch {}
+        }
+    }, []);
+
+    const handleSendMailChange = (e) => {
+        const { name, value } = e.target;
+        if (name === 'mail_id') {
+            const selectedMail = Array.isArray(contactMails)
+                ? contactMails.find((m) => String(m._id || m.id) === String(value))
+                : null;
+            setSendMailFormData((prev) => ({
+                ...prev,
+                mail_id: value,
+                subject: selectedMail ? (selectedMail.subject || selectedMail.full_name || '') : '',
+                message: selectedMail ? (selectedMail.message || selectedMail.desc || '') : '',
+            }));
+        } else {
+            setSendMailFormData((prev) => ({ ...prev, [name]: value }));
+        }
+        if (sendMailErrors[name]) {
+            setSendMailErrors((prev) => ({ ...prev, [name]: '' }));
+        }
+    };
+
+    const handleSendMailSubmit = async (e) => {
+        e.preventDefault();
+        const newErrors = {};
+        if (!sendMailFormData.mail_id) newErrors.mail_id = 'Please select a mail template';
+        if (!sendMailFormData.subject.trim()) newErrors.subject = 'Subject is required';
+        if (!sendMailFormData.message.trim()) newErrors.message = 'Message is required';
+        setSendMailErrors(newErrors);
+        if (Object.keys(newErrors).length > 0) { toast.error('Please fill required fields'); return; }
+        if (!contactId) { toast.error('Contact ID missing'); return; }
+        setIsSendMailSubmitting(true);
+        try {
+            const payload = {
+                contact_id: [contactId],
+                mail_id: sendMailFormData.mail_id,
+                subject: sendMailFormData.subject,
+                message: sendMailFormData.message,
+                user_id: sendMailUserId,
+            };
+            await dispatch(createContactMailSend(payload)).unwrap();
+            toast.success('Mail sent successfully');
+            setSendMailFormData({ mail_id: '', subject: '', message: '' });
+        } catch (err) {
+            toast.error(err || 'Failed to send mail');
+        } finally {
+            setIsSendMailSubmitting(false);
+        }
     };
 
     const fetchMessageHistory = async (selectedContactId) => {
@@ -671,20 +746,26 @@ const Messages = () => {
                         })}
                     </div>
 
-
                     {/* Contact Details Section */}
-                    <div className="contact-header">
-                        <div className="contact-title">
-                            <h1>{currentContact.fname} {currentContact.mname} {currentContact.lname}</h1>
+                    <div className="contact-header send-mail-section contact-details-section">
+                        <div
+                            className="contact-title send-mail-header"
+                        >
+                            <span className="send-mail-title">
+                                <FaUser style={{ marginRight: '0.5rem', color: '#3b7ddd' }} />
+                                {currentContact.fname} {currentContact.mname} {currentContact.lname}
+                            </span>
                         </div>
+                        <div className="contact-details-body"> 
 
                         {/* Personal Information */}
                         <div className="info-section">
-                            <h2 className="section-title">
+                            <h2 className="section-title section-title-toggle" onClick={() => setIsSectionPersonalOpen(p => !p)}>
                                 <FaUser style={{ marginRight: '0.1rem', color: '#b6110f' }} />
                                 Personal Information
+                                <span className={`section-collapse-chevron${isSectionPersonalOpen ? ' open' : ''}`}>&#9660;</span>
                             </h2>
-                            <div className="info-grid">
+                            {isSectionPersonalOpen && <div className="info-grid">
                                 <div className="info-row">
                                     <div className="info-item">
                                         <label className="info-label">First Name</label>
@@ -725,18 +806,19 @@ const Messages = () => {
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div>}
                         </div>
 
                         <hr className="section-divider" />
 
                         {/* Address Information */}
                         <div className="info-section">
-                            <h2 className="section-title">
+                            <h2 className="section-title section-title-toggle" onClick={() => setIsSectionAddressOpen(p => !p)}>
                                 <FaMapMarkerAlt style={{ marginRight: '0.1rem', color: '#b6110f' }} />
                                 Address Information
+                                <span className={`section-collapse-chevron${isSectionAddressOpen ? ' open' : ''}`}>&#9660;</span>
                             </h2>
-                            <div className="info-grid">
+                            {isSectionAddressOpen && <div className="info-grid">
                                 <div className="info-row">
                                     <div className="info-item info-item-full">
                                         <label className="info-label">Address Line 1</label>
@@ -769,18 +851,19 @@ const Messages = () => {
                                         <div className="info-value">{currentContact.zipcode || 'N/A'}</div>
                                     </div>
                                 </div>
-                            </div>
+                            </div>}
                         </div>
 
                         <hr className="section-divider" />
 
                         {/* Organization Information */}
                         <div className="info-section">
-                            <h2 className="section-title">
+                            <h2 className="section-title section-title-toggle" onClick={() => setIsSectionOrgOpen(p => !p)}>
                                 <FaBuilding style={{ marginRight: '0.1rem', color: '#b6110f' }} />
                                 Organization Information
+                                <span className={`section-collapse-chevron${isSectionOrgOpen ? ' open' : ''}`}>&#9660;</span>
                             </h2>
-                            <div className="info-grid">
+                            {isSectionOrgOpen && <div className="info-grid">
                                 <div className="info-row">
                                     <div className="info-item info-item-full">
                                         <label className="info-label">Organization Name</label>
@@ -809,18 +892,19 @@ const Messages = () => {
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div>}
                         </div>
 
                         <hr className="section-divider" />
 
                         {/* Question & Answer */}
                         <div className="info-section">
-                            <h2 className="section-title">
+                            <h2 className="section-title section-title-toggle" onClick={() => setIsSectionQAOpen(p => !p)}>
                                 <FaUser style={{ marginRight: '0.1rem', color: '#b6110f' }} />
-                                Question & Answer
+                                Question &amp; Answer
+                                <span className={`section-collapse-chevron${isSectionQAOpen ? ' open' : ''}`}>&#9660;</span>
                             </h2>
-                            <div className="info-grid">
+                            {isSectionQAOpen && <div className="info-grid">
                                 <div className="info-row">
                                     <div className="info-item">
                                         <label className="info-label">Total Lead Score</label>
@@ -860,18 +944,19 @@ const Messages = () => {
                                         </div>
                                     );
                                 })}
-                            </div>
+                            </div>}
                         </div>
 
                         <hr className="section-divider" />
 
                         {/* Additional Information */}
                         <div className="info-section">
-                            <h2 className="section-title">
+                            <h2 className="section-title section-title-toggle" onClick={() => setIsSectionAdditionalOpen(p => !p)}>
                                 <FaGlobe style={{ marginRight: '0.1rem', color: '#b6110f' }} />
                                 Additional Information
+                                <span className={`section-collapse-chevron${isSectionAdditionalOpen ? ' open' : ''}`}>&#9660;</span>
                             </h2>
-                            <div className="info-grid">
+                            {isSectionAdditionalOpen && <div className="info-grid">
                                 <div className="info-row">
                                     <div className="info-item">
                                         <label className="info-label">Lead Source</label>
@@ -942,7 +1027,8 @@ const Messages = () => {
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div>}
+                        </div>
                         </div>
                     </div>
 
@@ -977,6 +1063,12 @@ const Messages = () => {
                             onClick={() => setActiveTab(activeTab === 'schedule' ? '' : 'schedule')}
                         >
                             Schedule activity
+                        </button>
+                        <button
+                            className={`sidebar-tab ${activeTab === 'send-mail' ? 'active' : ''}`}
+                            onClick={() => setActiveTab(activeTab === 'send-mail' ? '' : 'send-mail')}
+                        >
+                            Send Mail
                         </button>
                     </div>
 
@@ -1064,6 +1156,71 @@ const Messages = () => {
                                         {isSubmitting ? 'Scheduling...' : 'Schedule'}
                                     </button>
                                 </div>
+                            )}
+
+                            {activeTab === 'send-mail' && (
+                                <form className="send-mail-form sidebar-send-mail-form" onSubmit={handleSendMailSubmit}>
+                                    <div className="send-mail-field">
+                                        <label className="send-mail-label">Mail Template <span className="send-mail-required">*</span></label>
+                                        <select
+                                            name="mail_id"
+                                            value={sendMailFormData.mail_id}
+                                            onChange={handleSendMailChange}
+                                            className={`send-mail-input send-mail-select${sendMailErrors.mail_id ? ' send-mail-input-error' : ''}`}
+                                        >
+                                            <option value="">Select mail template</option>
+                                            {Array.isArray(contactMails) && contactMails.map((mail) => {
+                                                const id = String(mail._id || mail.id || '');
+                                                const label = mail.full_name || mail.subject || mail.name || id;
+                                                return <option key={id} value={id}>{label}</option>;
+                                            })}
+                                        </select>
+                                        {sendMailErrors.mail_id && <span className="send-mail-error">{sendMailErrors.mail_id}</span>}
+                                    </div>
+                                    <div className="send-mail-field">
+                                        <label className="send-mail-label">Subject <span className="send-mail-required">*</span></label>
+                                        <input
+                                            type="text"
+                                            name="subject"
+                                            value={sendMailFormData.subject}
+                                            onChange={handleSendMailChange}
+                                            className={`send-mail-input${sendMailErrors.subject ? ' send-mail-input-error' : ''}`}
+                                            placeholder="Email subject"
+                                        />
+                                        {sendMailErrors.subject && <span className="send-mail-error">{sendMailErrors.subject}</span>}
+                                    </div>
+                                    <div className="send-mail-field">
+                                        <label className="send-mail-label">Mail Body <span className="send-mail-required">*</span></label>
+                                        <textarea
+                                            name="message"
+                                            value={sendMailFormData.message}
+                                            onChange={handleSendMailChange}
+                                            className={`send-mail-input send-mail-textarea${sendMailErrors.message ? ' send-mail-input-error' : ''}`}
+                                            rows={5}
+                                            placeholder="Email body..."
+                                        />
+                                        <div className="send-mail-placeholder-help">
+                                            <div className="send-mail-placeholder-title">Use the below placeholders in the mail body:</div>
+                                            <div><span className="send-mail-placeholder-token">{'{name}'}</span> - Contact&apos;s full name</div>
+                                            <div><span className="send-mail-placeholder-token">{'{email}'}</span> - Contact&apos;s email address</div>
+                                            <div><span className="send-mail-placeholder-token">{'{phone}'}</span> - Contact&apos;s phone number</div>
+                                        </div>
+                                        {sendMailErrors.message && <span className="send-mail-error">{sendMailErrors.message}</span>}
+                                    </div>
+                                    <div className="send-mail-actions">
+                                        <button type="submit" className="send-mail-submit" disabled={isSendMailSubmitting}>
+                                            <FaEnvelope style={{ marginRight: '0.4rem' }} />
+                                            {isSendMailSubmitting ? 'Sending...' : 'Send Mail'}
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className="send-mail-cancel"
+                                            onClick={() => { setSendMailFormData({ mail_id: '', subject: '', message: '' }); setSendMailErrors({}); }}
+                                        >
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </form>
                             )}
                         </div>
                     )}

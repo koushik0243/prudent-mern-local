@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import apiServiceHandler from '../../service/apiService';
 
+const CONTACT_LIST_TTL_MS = 5 * 60 * 1000;
+
 // Async thunk for fetching contacts
 export const fetchContacts = createAsyncThunk(
   'contacts/fetchContacts',
@@ -16,6 +18,16 @@ export const fetchContacts = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message || 'Failed to fetch contacts');
     }
+  },
+  {
+    condition: (_, { getState }) => {
+      const { contacts } = getState();
+      const hasFetchedRecently = Date.now() - (contacts?.lastFetchedAt || 0) < CONTACT_LIST_TTL_MS;
+
+      if (contacts?.loading) return false;
+      if (hasFetchedRecently) return false;
+      return true;
+    },
   }
 );
 
@@ -89,6 +101,7 @@ export const fetchContactById = createAsyncThunk(
 const initialState = {
   contacts: [],
   currentContact: null,
+  lastFetchedAt: 0,
   loading: false,
   error: null,
 };
@@ -114,6 +127,7 @@ const contactsSlice = createSlice({
       .addCase(fetchContacts.fulfilled, (state, action) => {
         state.loading = false;
         state.contacts = action.payload;
+        state.lastFetchedAt = Date.now();
       })
       .addCase(fetchContacts.rejected, (state, action) => {
         state.loading = false;
@@ -127,6 +141,7 @@ const contactsSlice = createSlice({
       .addCase(createContact.fulfilled, (state, action) => {
         state.loading = false;
         state.contacts.push(action.payload);
+        state.lastFetchedAt = Date.now();
       })
       .addCase(createContact.rejected, (state, action) => {
         state.loading = false;
@@ -145,6 +160,7 @@ const contactsSlice = createSlice({
         if (index !== -1) {
           state.contacts[index] = action.payload;
         }
+        state.lastFetchedAt = Date.now();
       })
       .addCase(updateContact.rejected, (state, action) => {
         state.loading = false;
@@ -160,6 +176,7 @@ const contactsSlice = createSlice({
         state.contacts = state.contacts.filter(
           contact => (contact._id || contact.id) !== action.payload
         );
+        state.lastFetchedAt = Date.now();
       })
       .addCase(deleteContact.rejected, (state, action) => {
         state.loading = false;

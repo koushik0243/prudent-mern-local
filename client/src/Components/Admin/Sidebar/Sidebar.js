@@ -5,10 +5,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from 'next/image';
 import { FaCog } from 'react-icons/fa';
-import menuIcon from "@/assets/images/dashboard.svg";
+import { jwtDecode } from 'jwt-decode';
 import { useSidebar } from '@/contexts/SidebarContext';
 import "./Sidebar.css";
-import { formatTodayDate } from '@/utils/Common';
 import dashIcon from "@/assets/images/dashboard.png";
 import contactIcon from "@/assets/images/user.svg";
 import tagIcon from "@/assets/images/icon-category.svg";
@@ -18,16 +17,47 @@ import mailIcon from "@/assets/images/mails.png";
 function Sidebar() {
     const pathname = usePathname();
     const { isSidebarOpen, toggleSidebar } = useSidebar();
+    const [adminName, setAdminName] = useState('Admin User');
+    const [adminRole, setAdminRole] = useState('Administrator');
+
+    useEffect(() => {
+        const token = localStorage.getItem('adminToken');
+        if (!token) return;
+
+        try {
+            const payload = jwtDecode(token);
+            const fullName = payload?.full_name || payload?.name || payload?.username;
+            const role = payload?.role || payload?.designation;
+
+            if (fullName) setAdminName(String(fullName));
+            if (role) setAdminRole(String(role));
+        } catch {
+            // Use fallback values when token payload is not readable
+        }
+    }, []);
+
+    const adminInitials = adminName
+        .split(' ')
+        .filter(Boolean)
+        .slice(0, 2)
+        .map((part) => part.charAt(0).toUpperCase())
+        .join('') || 'AU';
 
     useEffect(() => {
         const wrapperElement = document.getElementById('wrapper');
         if (wrapperElement) {
             if (!isSidebarOpen) {
                 wrapperElement.classList.add('sidebar-closed');
+                document.body.classList.add('sidebar-closed');
             } else {
                 wrapperElement.classList.remove('sidebar-closed');
+                document.body.classList.remove('sidebar-closed');
             }
         }
+
+        return () => {
+            document.body.classList.remove('sidebar-closed');
+        };
     }, [isSidebarOpen]);
 
     // Handle link click to close sidebar on mobile/tablet
@@ -117,12 +147,12 @@ function Sidebar() {
         <>
 
         <div className={`col-auto dashboard-pannel ${isSidebarOpen ? '' : 'sidebar-collapsed'}`} id="sidebar-wrapper">
-                        <div className="title-part mt-2">
-                            <h2>
-                            <span className="text-dark border border-2 border-white rounded p-1 fw-bold" style={{ fontSize: '14px', backgroundColor: "#dfdfdd" }}>
-                                {formatTodayDate()}
-                            </span>
-                            </h2>
+                        <div className="sidebar-profile-card">
+                            <div className="sidebar-profile-avatar">{adminInitials}</div>
+                            <div className="sidebar-profile-meta">
+                                <p className="sidebar-profile-name">{adminName}</p>
+                                <p className="sidebar-profile-role">{adminRole}</p>
+                            </div>
                         </div>
 
                         <ul className='sidebar-link'>

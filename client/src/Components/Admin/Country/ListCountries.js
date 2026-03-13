@@ -11,7 +11,7 @@ import '../TagManagers/ListTagManagers.css';
 const ListCountries = () => {
     const router = useRouter();
     const dispatch = useAppDispatch();
-    const { countries, loading, error } = useAppSelector((state) => state.country);
+    const { countries, loading, error, lastFetchedAt } = useAppSelector((state) => state.country);
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [deleteTargetIds, setDeleteTargetIds] = useState([]);
@@ -21,7 +21,7 @@ const ListCountries = () => {
     const [itemsPerPage] = useState(20);
 
     useEffect(() => {
-        if (loading || (Array.isArray(countries) && countries.length > 0)) return;
+        if (loading || lastFetchedAt > 0) return;
 
         const loadCountries = async () => {
             try {
@@ -31,7 +31,7 @@ const ListCountries = () => {
             }
         };
         loadCountries();
-    }, [dispatch, countries, loading]);
+    }, [dispatch, loading, lastFetchedAt]);
 
     useEffect(() => {
         if (error) {
@@ -264,7 +264,7 @@ const ListCountries = () => {
                 ) : filteredCountries.length === 0 ? (
                     <div className="empty-state">
                         <FaGlobe className="empty-icon" />
-                        <h3>No countries found</h3>
+                        <h3>No record found</h3>
                         <p>
                             {searchTerm
                                 ? 'Try adjusting your search terms'

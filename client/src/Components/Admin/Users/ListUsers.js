@@ -12,7 +12,7 @@ import './ListUsers.css';
 const ListUsers = () => {
     const router = useRouter();
     const dispatch = useAppDispatch();
-    const { users, loading, error } = useAppSelector((state) => state.user);
+    const { users, loading, error, lastFetchedAt } = useAppSelector((state) => state.user);
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [deleteTargetIds, setDeleteTargetIds] = useState([]);
@@ -38,7 +38,7 @@ const ListUsers = () => {
     }, []);
 
     useEffect(() => {
-        if (loading || (Array.isArray(users) && users.length > 0)) return;
+        if (loading || lastFetchedAt > 0) return;
 
         const loadUsers = async () => {
             try {
@@ -48,7 +48,7 @@ const ListUsers = () => {
             }
         };
         loadUsers();
-    }, [dispatch, users, loading]);
+    }, [dispatch, loading, lastFetchedAt]);
 
     useEffect(() => {
         if (error) {
@@ -309,7 +309,7 @@ const ListUsers = () => {
                 ) : filteredUsers.length === 0 ? (
                     <div className="empty-state">
                         <FaUserShield className="empty-icon" />
-                        <h3>No users found</h3>
+                        <h3>No record found</h3>
                         <p>
                             {searchTerm
                                 ? 'Try adjusting your search terms'

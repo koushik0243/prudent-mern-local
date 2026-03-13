@@ -124,7 +124,7 @@ const Header = () => {
                                 };
                             })
                             .filter(Boolean);
-                    } catch (error) {
+                    } catch {
                         return [];
                     }
                 })
@@ -135,7 +135,7 @@ const Header = () => {
                 .sort((left, right) => new Date(left.dueDate) - new Date(right.dueDate));
 
             setTodayNotifications(mergedSchedules);
-        } catch (error) {
+        } catch {
             setTodayNotifications([]);
         } finally {
             if (showLoader) {
@@ -202,191 +202,194 @@ const Header = () => {
 
     return (
         <>
-        <header className="header">
-            <div className="container-fluid">
-                <div className="row justify-content-between align-items-center">
-                    <div className="col-auto logo">
-                        {/* <Image src={logo} width={66} height={29} alt={"logo"} className="auth-logo" /> */}
-                        <p style={{ height: "29px" }}>&nbsp;</p>
-                        {/* <h1 style={{ color: "#fff", textAlign: "center", height: "37px", fontSize: "29px", paddingTop: "6px" }}>KIT</h1> */}
-                        <div className="bar-icon">
-                            <a href="#" className="navbar-brand" id="sidebar-toggle" onClick={handleSidebarToggle}>
-                                {/* <FaCaretSquareLeft size={24} /> */}
-                                <i className="fa fa-bars" aria-hidden="true"></i>
-                            </a>
-                        </div>
+            <header className="header">
+                <div className="header-inner">
+                    <div className="header-left">
+                        <button
+                            type="button"
+                            className="sidebar-toggle-btn"
+                            id="sidebar-toggle"
+                            aria-label="Toggle sidebar"
+                            onClick={handleSidebarToggle}
+                        >
+                            <i className="fa fa-bars" aria-hidden="true"></i>
+                        </button>
+
+                        {/* <div className="header-search-wrap" role="search" aria-label="Global search">
+                            <Image src={search} width={16} height={16} alt={"search"} className="header-search-icon" />
+                            <input
+                                type="text"
+                                className="header-search-input"
+                                placeholder="Search..."
+                                aria-label="Search"
+                            />
+                        </div> */}
                     </div>
-                    <div className="col-auto">
-                        <div className="header-right">
-                            <ul>
-                                <li>
-                                    <a href="#">                                    
-                                        <Image src={search} width={20} height={20} alt={"search"} />
-                                    </a>
-                                </li>
-                                <li className="notification-dropdown-container" ref={notificationDropdownRef}>
-                                    <a href="#" onClick={handleNotificationClick} className="header-icon-btn notification-icon-btn" aria-label="Notifications">
-                                        <Image src={bell} width={20} height={20} alt={"bell"} />
-                                        {notificationCount > 0 && <span className="notification-badge">{notificationCount}</span>}
-                                    </a>
 
-                                    {showNotificationDropdown && (
-                                        <div className="notification-dropdown-menu">
-                                            <div className="notification-dropdown-header">
-                                                <div>
-                                                    <h4>Notifications</h4>
-                                                    <p>{notificationSummaryLabel}</p>
-                                                </div>
-                                                <span className="notification-chip">Today</span>
-                                            </div>
+                    <div className="header-right">
+                        <ul>
+                            <li className="notification-dropdown-container" ref={notificationDropdownRef}>
+                                <a href="#" onClick={handleNotificationClick} className="header-icon-btn notification-icon-btn" aria-label="Notifications">
+                                    <Image src={bell} width={20} height={20} alt={"bell"} />
+                                    {notificationCount > 0 && <span className="notification-badge">{notificationCount}</span>}
+                                </a>
 
-                                            <div className="notification-dropdown-body">
-                                                {notificationLoading ? (
-                                                    <div className="notification-empty-state">Loading notifications...</div>
-                                                ) : todayNotifications.length === 0 ? (
-                                                    <div className="notification-empty-state">
-                                                        <FaBell />
-                                                        <span>No scheduled activities for today.</span>
-                                                    </div>
-                                                ) : (
-                                                    todayNotifications.map((item) => (
-                                                        <button
-                                                            key={item.id}
-                                                            type="button"
-                                                            className="notification-item"
-                                                            onClick={() => handleNotificationItemClick(item.contactId)}
-                                                        >
-                                                            <div className="notification-item-icon">
-                                                                {normalizeText(item.activityType) === 'call'
-                                                                    ? <FaPhoneAlt />
-                                                                    : normalizeText(item.activityType) === 'email'
-                                                                        ? <FaEnvelope />
-                                                                        : normalizeText(item.activityType) === 'task'
-                                                                            ? <FaTasks />
-                                                                        : <FaCalendarAlt />}
-                                                            </div>
-                                                            <div className="notification-item-content">
-                                                                <div className="notification-item-title-row">
-                                                                    <strong>{item.activityType}</strong>
-                                                                    <span className="notification-time"><FaRegClock /> {formatNotificationTime(item.dueDate)}</span>
-                                                                </div>
-                                                                <p className="notification-item-contact">{item.contactName}</p>
-                                                                <p className="notification-item-description">{item.description}</p>
-                                                            </div>
-                                                        </button>
-                                                    ))
-                                                )}
+                                {showNotificationDropdown && (
+                                    <div className="notification-dropdown-menu">
+                                        <div className="notification-dropdown-header">
+                                            <div>
+                                                <h4>Notifications</h4>
+                                                <p>{notificationSummaryLabel}</p>
                                             </div>
+                                            <span className="notification-chip">Today</span>
                                         </div>
-                                    )}
-                                </li>
-                                <li className="user-dropdown-container" ref={userDropdownRef} style={{ position: 'relative' }}>
-                                    <a href="#" onClick={handleUserIconClick} className="header-icon-btn">
-                                        <Image src={user} width={20} height={20} alt={"user"} />
-                                    </a>
-                                    {showUserDropdown && (
-                                        <div 
-                                            className="user-dropdown-menu"
+
+                                        <div className="notification-dropdown-body">
+                                            {notificationLoading ? (
+                                                <div className="notification-empty-state">Loading notifications...</div>
+                                            ) : todayNotifications.length === 0 ? (
+                                                <div className="notification-empty-state">
+                                                    <FaBell />
+                                                    <span>No scheduled activities for today.</span>
+                                                </div>
+                                            ) : (
+                                                todayNotifications.map((item) => (
+                                                    <button
+                                                        key={item.id}
+                                                        type="button"
+                                                        className="notification-item"
+                                                        onClick={() => handleNotificationItemClick(item.contactId)}
+                                                    >
+                                                        <div className="notification-item-icon">
+                                                            {normalizeText(item.activityType) === 'call'
+                                                                ? <FaPhoneAlt />
+                                                                : normalizeText(item.activityType) === 'email'
+                                                                    ? <FaEnvelope />
+                                                                    : normalizeText(item.activityType) === 'task'
+                                                                        ? <FaTasks />
+                                                                        : <FaCalendarAlt />}
+                                                        </div>
+                                                        <div className="notification-item-content">
+                                                            <div className="notification-item-title-row">
+                                                                <strong>{item.activityType}</strong>
+                                                                <span className="notification-time"><FaRegClock /> {formatNotificationTime(item.dueDate)}</span>
+                                                            </div>
+                                                            <p className="notification-item-contact">{item.contactName}</p>
+                                                            <p className="notification-item-description">{item.description}</p>
+                                                        </div>
+                                                    </button>
+                                                ))
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
+                            </li>
+
+                            <li className="user-dropdown-container" ref={userDropdownRef} style={{ position: 'relative' }}>
+                                <a href="#" onClick={handleUserIconClick} className="header-icon-btn">
+                                    <Image src={user} width={20} height={20} alt={"user"} />
+                                </a>
+                                {showUserDropdown && (
+                                    <div
+                                        className="user-dropdown-menu"
+                                        style={{
+                                            position: 'absolute',
+                                            top: 'calc(100% + 10px)',
+                                            right: '0',
+                                            background: 'white',
+                                            border: '1px solid #e2e8f0',
+                                            borderRadius: '8px',
+                                            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+                                            minWidth: '180px',
+                                            zIndex: 99999,
+                                            padding: '8px 0',
+                                            listStyle: 'none'
+                                        }}
+                                    >
+                                        <button
+                                            onClick={handleDashboard}
+                                            className="dropdown-item"
                                             style={{
-                                                position: 'absolute',
-                                                top: 'calc(100% + 10px)',
-                                                right: '0',
-                                                background: 'white',
-                                                border: '1px solid #e2e8f0',
-                                                borderRadius: '8px',
-                                                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-                                                minWidth: '180px',
-                                                zIndex: 99999,
-                                                padding: '8px 0',
-                                                listStyle: 'none'
+                                                display: 'block',
+                                                width: '100%',
+                                                padding: '12px 20px',
+                                                textAlign: 'left',
+                                                background: 'transparent',
+                                                border: 'none',
+                                                cursor: 'pointer',
+                                                fontSize: '14px',
+                                                color: '#333'
+                                            }}
+                                            onMouseEnter={(e) => {
+                                                e.target.style.backgroundColor = '#f8f9fa';
+                                                e.target.style.color = '#b6110f';
+                                            }}
+                                            onMouseLeave={(e) => {
+                                                e.target.style.backgroundColor = 'transparent';
+                                                e.target.style.color = '#333';
                                             }}
                                         >
-                                            <button 
-                                                onClick={handleDashboard} 
-                                                className="dropdown-item"
-                                                style={{
-                                                    display: 'block',
-                                                    width: '100%',
-                                                    padding: '12px 20px',
-                                                    textAlign: 'left',
-                                                    background: 'transparent',
-                                                    border: 'none',
-                                                    cursor: 'pointer',
-                                                    fontSize: '14px',
-                                                    color: '#333'
-                                                }}
-                                                onMouseEnter={(e) => {
-                                                    e.target.style.backgroundColor = '#f8f9fa';
-                                                    e.target.style.color = '#b6110f';
-                                                }}
-                                                onMouseLeave={(e) => {
-                                                    e.target.style.backgroundColor = 'transparent';
-                                                    e.target.style.color = '#333';
-                                                }}
-                                            >
-                                                Dashboard
-                                            </button>
-                                            <button 
-                                                onClick={handleChangePassword} 
-                                                className="dropdown-item"
-                                                style={{
-                                                    display: 'block',
-                                                    width: '100%',
-                                                    padding: '12px 20px',
-                                                    textAlign: 'left',
-                                                    background: 'transparent',
-                                                    border: 'none',
-                                                    cursor: 'pointer',
-                                                    fontSize: '14px',
-                                                    color: '#333'
-                                                }}
-                                                onMouseEnter={(e) => {
-                                                    e.target.style.backgroundColor = '#f8f9fa';
-                                                    e.target.style.color = '#b6110f';
-                                                }}
-                                                onMouseLeave={(e) => {
-                                                    e.target.style.backgroundColor = 'transparent';
-                                                    e.target.style.color = '#333';
-                                                }}
-                                            >
-                                                Change Password
-                                            </button>
-                                            <button 
-                                                onClick={handleLogout} 
-                                                className="dropdown-item"
-                                                style={{
-                                                    display: 'block',
-                                                    width: '100%',
-                                                    padding: '12px 20px',
-                                                    textAlign: 'left',
-                                                    background: 'transparent',
-                                                    border: 'none',
-                                                    cursor: 'pointer',
-                                                    fontSize: '14px',
-                                                    color: '#333'
-                                                }}
-                                                onMouseEnter={(e) => {
-                                                    e.target.style.backgroundColor = '#f8f9fa';
-                                                    e.target.style.color = '#b6110f';
-                                                }}
-                                                onMouseLeave={(e) => {
-                                                    e.target.style.backgroundColor = 'transparent';
-                                                    e.target.style.color = '#333';
-                                                }}
-                                            >
-                                                Logout
-                                            </button>
-                                        </div>
-                                    )}
-                                </li>
-                            </ul>
-                        </div>
+                                            Dashboard
+                                        </button>
+                                        <button
+                                            onClick={handleChangePassword}
+                                            className="dropdown-item"
+                                            style={{
+                                                display: 'block',
+                                                width: '100%',
+                                                padding: '12px 20px',
+                                                textAlign: 'left',
+                                                background: 'transparent',
+                                                border: 'none',
+                                                cursor: 'pointer',
+                                                fontSize: '14px',
+                                                color: '#333'
+                                            }}
+                                            onMouseEnter={(e) => {
+                                                e.target.style.backgroundColor = '#f8f9fa';
+                                                e.target.style.color = '#b6110f';
+                                            }}
+                                            onMouseLeave={(e) => {
+                                                e.target.style.backgroundColor = 'transparent';
+                                                e.target.style.color = '#333';
+                                            }}
+                                        >
+                                            Change Password
+                                        </button>
+                                        <button
+                                            onClick={handleLogout}
+                                            className="dropdown-item"
+                                            style={{
+                                                display: 'block',
+                                                width: '100%',
+                                                padding: '12px 20px',
+                                                textAlign: 'left',
+                                                background: 'transparent',
+                                                border: 'none',
+                                                cursor: 'pointer',
+                                                fontSize: '14px',
+                                                color: '#333'
+                                            }}
+                                            onMouseEnter={(e) => {
+                                                e.target.style.backgroundColor = '#f8f9fa';
+                                                e.target.style.color = '#b6110f';
+                                            }}
+                                            onMouseLeave={(e) => {
+                                                e.target.style.backgroundColor = 'transparent';
+                                                e.target.style.color = '#333';
+                                            }}
+                                        >
+                                            Logout
+                                        </button>
+                                    </div>
+                                )}
+                            </li>
+                        </ul>
                     </div>
                 </div>
-            </div>
-        </header>
+            </header>
         </>
     );
-}
+};
 
 export default Header;

@@ -1,3 +1,7 @@
+body.dashboard-page-no-scroll {
+    overflow-y: hidden;
+}
+
 .contact-leads2-container {
     padding: 1.25rem;
     background: #f8f9fa;
@@ -687,6 +691,313 @@
     .lead2-actions .btn-secondary {
         width: 100%;
         justify-content: center;
+    }
+}
+
+/* AdminKit-inspired dashboard refinements */
+.contact-leads2-container {
+    padding: 0.85rem !important;
+    background: transparent !important;
+}
+
+.contact-leads2-header {
+    margin-bottom: 1rem;
+    margin-top: 50px;
+}
+
+.contact-leads2-header .page-title {
+    font-size: 1.75rem;
+    color: #111827 !important;
+}
+
+.contact-leads2-header .page-subtitle {
+    color: #6b7280 !important;
+}
+
+.stage2-strip {
+    gap: 10px;
+    overflow-x: auto;
+    padding: 0.1rem 0 0.35rem;
+}
+
+.stage2-strip-item {
+    clip-path: none !important;
+    min-width: 150px;
+    margin-right: 0 !important;
+    border-radius: 10px;
+    padding: 10px 12px !important;
+    box-shadow: 0 10px 20px rgba(15, 23, 42, 0.18);
+}
+
+.leads2-list-card {
+    border: 1px solid #e5eaf2 !important;
+    border-radius: 10px !important;
+    box-shadow: 0 2px 12px rgba(15, 23, 42, 0.06) !important;
+}
+
+.stage2-accordion-header,
+.lead2-accordion-header {
+    background: #ffffff !important;
+}
+
+.stage2-accordion-header:hover,
+.lead2-accordion-header:hover {
+    background: #f8fbff !important;
+}
+
+.stage2-name,
+.lead2-name,
+.lead2-card-title {
+    color: #1f2937 !important;
+}
+
+.lead2-card-item,
+.lead2-accordion-item,
+.lead2-column {
+    border-color: #e5eaf2 !important;
+    box-shadow: 0 1px 4px rgba(15, 23, 42, 0.04);
+}
+
+.view2-toggle-btn.active,
+.lead2-tab.active,
+.lead2-actions .btn-primary:hover,
+.lead2-actions .btn-secondary:hover,
+.lead2-btn-danger {
+    background: #3b7ddd !important;
+    border-color: #3b7ddd !important;
+}
+
+.spinner-border {
+    border-right-color: #3b7ddd !important;
+}
+
+/* Stage board layout (screenshot style) */
+.stages-board {
+    display: flex;
+    gap: 12px;
+    align-items: start;
+    overflow-x: auto;
+    padding: 2px 2px 10px;
+}
+
+.stage-board-column {
+    background: #f4f6fa;
+    border: 1px solid #dbe3ef;
+    border-radius: 8px;
+    min-height: 750px;
+    display: flex;
+    flex-direction: column;
+    width: 280px;
+    flex: 0 0 280px;
+}
+
+.stage-board-column.is-collapsed {
+    width: 42px;
+    flex: 0 0 42px;
+}
+
+.stage-board-column-header {
+    padding: 5px 10px 4px;
+    border-bottom: 1px solid #dce3ed;
+}
+
+.stage-board-column.is-collapsed .stage-board-column-header {
+    height: 100%;
+    border-bottom: 0;
+    padding: 6px 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.stage-board-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.stage-board-title-row h3 {
+    margin: 0;
+    color: #1f2937;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.stage-board-title-row span {
+    color: #111827;
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+
+.stage-board-title-tools {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.stage-board-collapse-btn {
+    width: 18px;
+    height: 18px;
+    border: 1px solid #c7cfdb;
+    border-radius: 999px;
+    background: #ffffff;
+    color: #6b7280;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.stage-board-collapse-btn:hover {
+    border-color: #3b7ddd;
+    color: #3b7ddd;
+}
+
+.stage-board-collapsed-label {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    color: #4b5563;
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1.1;
+}
+
+.stage-board-progress {
+    display: none;
+}
+
+.stage-board-progress span {
+    display: none;
+}
+
+.stage-board-cards {
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.stage-board-card {
+    border: 1px solid #cfd8e6;
+    background: #ffffff;
+    padding: 8px;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+.stage-board-card:focus-visible {
+    outline: 2px solid #3b7ddd;
+    outline-offset: 1px;
+}
+
+.stage-board-card-title {
+    margin: 0 0 2px;
+    color: #111827;
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1.3;
+}
+
+.stage-board-card-subline {
+    margin: 0;
+    color: #4b5563;
+    font-size: 0.88rem;
+    line-height: 1.25;
+}
+
+.stage-board-card-age {
+    margin: 6px 0 0;
+    color: #000000;
+    font-size: 0.65rem;
+    font-weight: 600;
+}
+
+.stage-board-card-actions {
+    margin-top: 8px;
+    display: flex;
+    gap: 6px;
+}
+
+.stage-board-card-footer {
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.stage-board-card-footer .stage-board-card-actions {
+    margin-top: 0;
+}
+
+.stage-board-lead-category {
+    font-size: 0.72rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.stage-board-lead-category.is-hot {
+    color: #dc2626;
+}
+
+.stage-board-lead-category.is-warm {
+    color: #d97706;
+}
+
+.stage-board-lead-category.is-cold {
+    color: #2563eb;
+}
+
+.stage-board-lead-category.is-unknown {
+    color: #6b7280;
+}
+
+.stage-board-icon-btn {
+    width: 22px;
+    height: 22px;
+    border: 1px solid #cfd8e6;
+    border-radius: 999px;
+    background: #ffffff;
+    color: #6b7280;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 0.72rem;
+}
+
+.stage-board-icon-btn:hover {
+    border-color: #3b7ddd;
+    color: #3b7ddd;
+}
+
+.stage-board-empty {
+    border: 1px dashed #cbd5e1;
+    border-radius: 6px;
+    padding: 10px;
+    color: #64748b;
+    font-size: 0.86rem;
+    text-align: center;
+    background: #f8fafc;
+}
+
+@media (max-width: 768px) {
+    .stages-board {
+        gap: 8px;
+    }
+
+    .stage-board-column {
+        width: 86vw;
+        flex: 0 0 86vw;
+    }
+
+    .stage-board-column.is-collapsed {
+        width: 36px;
+        flex: 0 0 36px;
     }
 }
 

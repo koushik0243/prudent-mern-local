@@ -21,11 +21,10 @@ export const fetchContactMailSends = createAsyncThunk(
   {
     condition: (_, { getState }) => {
       const { contactMailSend } = getState();
-      const hasData = Array.isArray(contactMailSend?.contactMailSends) && contactMailSend.contactMailSends.length > 0;
-      const isFresh = hasData && (Date.now() - (contactMailSend.lastFetchedAt || 0) < CONTACT_MAIL_SEND_LIST_TTL_MS);
+      const hasFetchedRecently = Date.now() - (contactMailSend?.lastFetchedAt || 0) < CONTACT_MAIL_SEND_LIST_TTL_MS;
 
       if (contactMailSend?.loading) return false;
-      if (isFresh) return false;
+      if (hasFetchedRecently) return false;
       return true;
     },
   }

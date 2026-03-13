@@ -293,7 +293,7 @@ const ListContactMail = () => {
                 ) : filteredContactMails.length === 0 ? (
                     <div className="empty-state">
                         <FaEnvelope className="empty-icon" />
-                        <h3>No contact mail records found</h3>
+                        <h3>No record found</h3>
                         <p>
                             {searchTerm
                                 ? 'Try adjusting your search terms'

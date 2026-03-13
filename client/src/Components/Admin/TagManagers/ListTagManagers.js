@@ -11,7 +11,7 @@ import './ListTagManagers.css';
 const ListTagManagers = () => {
     const router = useRouter();
     const dispatch = useAppDispatch();
-    const { tagManagers, loading, error } = useAppSelector((state) => state.tagManager);
+    const { tagManagers, loading, error, lastFetchedAt } = useAppSelector((state) => state.tagManager);
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [deleteTargetIds, setDeleteTargetIds] = useState([]);
@@ -21,7 +21,7 @@ const ListTagManagers = () => {
     const [itemsPerPage] = useState(20);
 
     useEffect(() => {
-        if (loading || (Array.isArray(tagManagers) && tagManagers.length > 0)) return;
+        if (loading || lastFetchedAt > 0) return;
 
         const loadTagManagers = async () => {
             try {
@@ -31,7 +31,7 @@ const ListTagManagers = () => {
             }
         };
         loadTagManagers();
-    }, [dispatch, tagManagers, loading]);
+    }, [dispatch, loading, lastFetchedAt]);
 
     useEffect(() => {
         if (error) {
@@ -289,7 +289,7 @@ const ListTagManagers = () => {
                 ) : filteredTagManagers.length === 0 ? (
                     <div className="empty-state">
                         <FaTags className="empty-icon" />
-                        <h3>No tag managers found</h3>
+                        <h3>No record found</h3>
                         <p>
                             {searchTerm
                                 ? 'Try adjusting your search terms'

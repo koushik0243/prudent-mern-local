@@ -14,7 +14,7 @@ import './ListContacts.css';
 const ListContacts = () => {
     const router = useRouter();
     const dispatch = useAppDispatch();
-    const { contacts, loading, error } = useAppSelector((state) => state.contacts);
+    const { contacts, loading, error, lastFetchedAt } = useAppSelector((state) => state.contacts);
     const { stages } = useAppSelector((state) => state.stages);
     const { tagManagers } = useAppSelector((state) => state.tagManager);
 
@@ -48,7 +48,7 @@ const ListContacts = () => {
 
     useEffect(() => {
         if (userId) {
-            if (loading || (Array.isArray(contacts) && contacts.length > 0)) return;
+            if (loading || lastFetchedAt > 0) return;
 
             const loadContacts = async () => {
                 try {
@@ -59,7 +59,7 @@ const ListContacts = () => {
             };
             loadContacts();
         }
-    }, [dispatch, userId, contacts, loading]);
+    }, [dispatch, userId, loading, lastFetchedAt]);
 
     useEffect(() => {
         if (!Array.isArray(stages) || stages.length === 0) {
@@ -825,7 +825,7 @@ const ListContacts = () => {
                 ) : filteredContacts.length === 0 ? (
                     <div className="empty-state">
                         <FaUser className="empty-icon" />
-                        <h3>No contacts found</h3>
+                        <h3>No record found</h3>
                         <p>
                             {searchTerm
                                 ? 'Try adjusting your search terms'

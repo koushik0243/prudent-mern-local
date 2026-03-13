@@ -354,12 +354,12 @@
     text-transform: capitalize;
 }
 
-.status-active {
+.status-badge.active {
     background: #e8f5e9;
     color: #2e7d32;
 }
 
-.status-inactive {
+.status-badge.inactive {
     background: #ffebee;
     color: #c62828;
 }

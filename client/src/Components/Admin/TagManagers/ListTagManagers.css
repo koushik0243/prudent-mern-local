@@ -37,6 +37,7 @@
     margin-bottom: 0.75rem;
     flex-wrap: wrap;
     gap: 1rem;
+    margin-top: 50px;
 }
 
 .page-title {

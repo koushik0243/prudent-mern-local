@@ -395,3 +395,131 @@
         text-align: left !important;
     }
 }
+
+/* AdminKit-inspired topbar */
+.header {
+    background: #ffffff !important;
+    border-bottom: 1px solid #e6edf6 !important;
+    box-shadow: 0 1px 0 rgba(15, 23, 42, 0.04) !important;
+    padding: 0.5rem 1rem !important;
+}
+
+@media (min-width: 991px) {
+    .header {
+        background: linear-gradient(90deg, #2f70cc 0, #265ea9 250px, #ffffff 250px, #ffffff 100%) !important;
+    }
+
+    .header-inner {
+        margin-left: 250px;
+    }
+
+    body.sidebar-closed .header {
+        background: #ffffff !important;
+    }
+
+    body.sidebar-closed .header-inner {
+        margin-left: 0;
+    }
+}
+
+.header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    flex: 1;
+}
+
+.sidebar-toggle-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: 1px solid #dde5f0;
+    background: #ffffff;
+    color: #4b5563;
+    flex-shrink: 0;
+}
+
+.sidebar-toggle-btn:hover {
+    background: #f3f7fd;
+    color: #1f2937;
+}
+
+.header-search-wrap {
+    width: min(520px, 100%);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 22px;
+    border: 1px solid #dbe4f0;
+    background: #f7f9fc;
+    padding: 0 12px;
+    height: 38px;
+}
+
+.header-search-icon {
+    opacity: 0.65;
+    flex-shrink: 0;
+}
+
+.header-search-input {
+    border: 0;
+    outline: none;
+    width: 100%;
+    min-width: 0;
+    background: transparent;
+    color: #374151;
+    font-size: 0.92rem;
+}
+
+.header-search-input::placeholder {
+    color: #9aa6b2;
+}
+
+.header-right ul {
+    gap: 0.45rem !important;
+}
+
+.header-icon-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    border: 1px solid #dce5f0;
+    background: #ffffff;
+}
+
+.header-right .header-icon-btn img {
+    filter: brightness(0) saturate(100%) !important;
+    opacity: 1 !important;
+}
+
+.header-icon-btn:hover {
+    background: #f4f8ff !important;
+    border-color: #cfdcf0;
+}
+
+@media (max-width: 767px) {
+    .header {
+        padding: 0.65rem 0.75rem !important;
+    }
+
+    .header-inner {
+        gap: 8px;
+    }
+
+    .header-search-wrap {
+        height: 34px;
+        border-radius: 18px;
+    }
+
+    .header-search-input {
+        font-size: 0.85rem;
+    }
+}

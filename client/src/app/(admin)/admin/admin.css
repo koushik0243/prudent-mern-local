@@ -239,10 +239,6 @@
 }
 
 
-.search-input {
-    /* width: 98% !important; */
-}
-
 .type-badge.banner {
     background: none !important;
 }
@@ -382,4 +378,236 @@ input.search-input, select.filter-select {
 
 .pagination-btn:hover {
     color: #000 !important;
+}
+
+/* AdminKit-inspired unified admin theme */
+.wrapper {
+    background: #f1f4f9 !important;
+}
+
+.Dashboard-section {
+    background: #f1f4f9 !important;
+}
+
+.Dashboard-section .container-fluid {
+    max-width: 100%;
+    padding: 0 !important;
+}
+
+.Dashboard-section .row {
+    margin: 0 !important;
+    align-items: stretch;
+}
+
+#content-wrapper {
+    background: #f1f4f9 !important;
+    padding: 1.15rem 1.25rem !important;
+}
+
+.list-contacts-container,
+.contacts-container,
+.users-container,
+.contact-leads2-container,
+.change-password-container,
+.form-container,
+.show-page,
+.edit-page {
+    background: transparent !important;
+}
+
+.page-title,
+h1.page-title,
+.contacts-container .page-title,
+.users-container .page-title {
+    color: #1f2937 !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.01em;
+}
+
+.page-subtitle,
+.contacts-container .page-subtitle,
+.users-container .page-subtitle {
+    color: #6b7280 !important;
+}
+
+.table-card {
+    overflow: hidden;
+}
+
+.contacts-table thead,
+.users-table thead {
+    background: #f7f9fc !important;
+}
+
+.contacts-table th,
+.users-table th {
+    color: #4b5563 !important;
+    font-weight: 700 !important;
+    border-bottom: 1px solid #e5eaf2 !important;
+}
+
+.contacts-table td,
+.users-table td {
+    border-bottom: 1px solid #eef2f7 !important;
+    color: #111827 !important;
+}
+
+.contacts-table tbody tr:hover,
+.users-table tbody tr:hover {
+    background: #f8fbff !important;
+}
+
+.btn-primary,
+.btn-add,
+.btn-submit,
+.create-btn {
+    background: #3b7ddd !important;
+    border-color: #3b7ddd !important;
+    color: #ffffff !important;
+}
+
+.btn-primary:hover,
+.btn-add:hover,
+.btn-submit:hover,
+.create-btn:hover {
+    background: #2f69bd !important;
+    border-color: #2f69bd !important;
+}
+
+.btn-secondary,
+.btn-back {
+    background: #ffffff !important;
+    border: 1px solid #d4dbe6 !important;
+    color: #334155 !important;
+}
+
+.btn-secondary:hover,
+.btn-back:hover {
+    border-color: #3b7ddd !important;
+    color: #3b7ddd !important;
+}
+
+.search-input,
+.filter-select,
+input.search-input,
+select.filter-select {
+    border: 1px solid #d8e0ec !important;
+    background: #ffffff !important;
+    color: #111827 !important;
+    border-radius: 8px !important;
+}
+
+.search-input:focus,
+.filter-select:focus {
+    border-color: #3b7ddd !important;
+    box-shadow: 0 0 0 3px rgba(59, 125, 221, 0.18) !important;
+}
+
+.pagination-btn.active {
+    border-color: #3b7ddd !important;
+    background: #3b7ddd !important;
+    color: #ffffff !important;
+}
+
+/* Screenshot-like listing table style */
+.table-card {
+    border: 1px solid #d8dde6 !important;
+    border-radius: 6px !important;
+    box-shadow: none !important;
+    background: #ffffff !important;
+}
+
+.table-responsive {
+    border-radius: 0 !important;
+}
+
+.contacts-table,
+.users-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.contacts-table thead,
+.users-table thead {
+    background: #f6f8fb !important;
+    border-bottom: 1px solid #d9e0ea !important;
+}
+
+.contacts-table th,
+.users-table th {
+    padding: 0.72rem 0.8rem !important;
+    color: #5a6472 !important;
+    font-size: 0.95rem !important;
+    font-weight: 700 !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+    border-bottom: 1px solid #d9e0ea !important;
+    white-space: nowrap;
+}
+
+.contacts-table td,
+.users-table td {
+    padding: 0.66rem 0.8rem !important;
+    color: #4b5563 !important;
+    font-size: 0.94rem !important;
+    border-bottom: 1px solid #e4e9f1 !important;
+    vertical-align: middle;
+}
+
+.contacts-table tbody tr:nth-child(odd),
+.users-table tbody tr:nth-child(odd),
+.modern-table tbody tr:nth-child(odd) {
+    background: #f7f9fc !important;
+}
+
+.contacts-table tbody tr:nth-child(even),
+.users-table tbody tr:nth-child(even),
+.modern-table tbody tr:nth-child(even) {
+    background: #eef2f6 !important;
+}
+
+.contacts-table tbody tr:hover,
+.users-table tbody tr:hover {
+    background: #f9fbfd !important;
+}
+
+.contacts-table tbody tr:last-child td,
+.users-table tbody tr:last-child td {
+    border-bottom: 0 !important;
+}
+
+.contact-name-text,
+.user-name-text {
+    color: #4b5563 !important;
+    text-decoration: none !important;
+    font-weight: 500 !important;
+}
+
+.contact-name-text:hover,
+.user-name-text:hover {
+    color: #2f69bd !important;
+}
+
+.status-badge {
+    padding: 2px 8px !important;
+    border-radius: 4px !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
+    text-transform: capitalize !important;
+}
+
+.status-badge.active {
+    background: #2fbf71 !important;
+    color: #ffffff !important;
+}
+
+.status-badge.inactive {
+    background: #f7b731 !important;
+    color: #ffffff !important;
+}
+
+.status-badge.deleted {
+    background: #e74c3c !important;
+    color: #ffffff !important;
 }

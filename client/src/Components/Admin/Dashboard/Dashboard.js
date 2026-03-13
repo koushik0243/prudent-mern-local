@@ -19,7 +19,6 @@ import {
     FaBuilding,
     FaThLarge,
     FaBars,
-    FaEdit,
 } from 'react-icons/fa';
 import './Dashboard.css';
 
@@ -75,6 +74,14 @@ const Dashboard = () => {
     const [shiftingContactMap, setShiftingContactMap] = useState({});
     const [pendingStageChange, setPendingStageChange] = useState(null);
     const [userId, setUserId] = useState('');
+    const [collapsedStageMap, setCollapsedStageMap] = useState({});
+
+    useEffect(() => {
+        document.body.classList.add('dashboard-page-no-scroll');
+        return () => {
+            document.body.classList.remove('dashboard-page-no-scroll');
+        };
+    }, []);
 
     useEffect(() => {
         const token = localStorage.getItem('adminToken');
@@ -321,6 +328,22 @@ const Dashboard = () => {
 
     const stageStripItems = useMemo(() => {
         return stageGroups.filter((group) => group.key !== 'unassigned-stage');
+    }, [stageGroups]);
+
+    useEffect(() => {
+        setCollapsedStageMap((previousMap) => {
+            const nextMap = {};
+
+            stageGroups.forEach((group, index) => {
+                if (Object.prototype.hasOwnProperty.call(previousMap, group.key)) {
+                    nextMap[group.key] = previousMap[group.key];
+                } else {
+                    nextMap[group.key] = index >= 2;
+                }
+            });
+
+            return nextMap;
+        });
     }, [stageGroups]);
 
     useEffect(() => {
@@ -583,292 +606,179 @@ const Dashboard = () => {
         router.push(`/admin/contacts/edit/${contactId}`);
     };
 
+    const handleToggleStageColumn = (stageKey) => {
+        setCollapsedStageMap((previousMap) => ({
+            ...previousMap,
+            [stageKey]: !previousMap[stageKey],
+        }));
+    };
+
+    const getRelativeAgeLabel = (dateValue) => {
+        if (!dateValue) return 'Date not available';
+
+        const parsedDate = new Date(dateValue);
+        if (Number.isNaN(parsedDate.getTime())) return 'Date not available';
+
+        const now = new Date();
+        const diffMs = now.getTime() - parsedDate.getTime();
+        const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+        if (diffDays <= 0) return 'Today';
+        if (diffDays === 1) return '1 day ago';
+        return `${diffDays} days ago`;
+    };
+
+    const getLeadCategoryBadge = (categoryValue) => {
+        const normalizedCategory = String(categoryValue || '').trim().toLowerCase();
+        const emojiByCategory = {
+            hot: '🔥',
+            warm: '🟡',
+            cold: '🔵',
+        };
+
+        if (!normalizedCategory) {
+            return { text: '⚪ unknown', className: 'is-unknown' };
+        }
+
+        const emoji = emojiByCategory[normalizedCategory] || '⚪';
+        const className = emojiByCategory[normalizedCategory] ? `is-${normalizedCategory}` : 'is-unknown';
+        return { text: `${emoji} ${normalizedCategory}`, className };
+    };
+
     return (
         <div className="contact-leads2-container">
             <div className="contact-leads2-header">
                 <div className="contact-leads2-header-top">
-                    <h1 className="page-title">Dashboard</h1>
-                    <div className="view2-toggle">
-                        <button
-                            type="button"
-                            className={`view2-toggle-btn ${viewMode === 'card' ? 'active' : ''}`}
-                            onClick={() => setViewMode('card')}
-                        >
-                            <FaThLarge /> Grid
-                        </button>
-                        <button
-                            type="button"
-                            className={`view2-toggle-btn ${viewMode === 'accordion' ? 'active' : ''}`}
-                            onClick={() => setViewMode('accordion')}
-                        >
-                            <FaBars /> List
-                        </button>
-                    </div>
+                    <h1 className="page-title">Stage Dashboard</h1>
                 </div>
-                <p className="page-subtitle">View leads grouped by stages</p>
+                <p className="page-subtitle">Track leads across all stages</p>
             </div>
 
-            <div className="leads2-toolbar">
-                <div className="stage2-strip" aria-label="Lead stages">
-                    {stageStripItems.map((stageGroup, index) => (
-                        <div key={stageGroup.key} className={`stage2-strip-item stage2-strip-color-${(index % 10) + 1}`}>
-                            <span className="stage2-strip-count">{stageGroup.contacts.length}</span>
-                            <span className="stage2-strip-name">{stageGroup.label}</span>
-                        </div>
-                    ))}
-                </div>
-            </div>
-
-            <div className="leads2-list-card">
-                {loading ? (
+            {loading ? (
+                <div className="leads2-list-card">
                     <div className="loading-state">
                         <div className="spinner-border" role="status"></div>
                         <p>Loading leads...</p>
                     </div>
-                ) : stageGroups.length === 0 ? (
+                </div>
+            ) : stageGroups.length === 0 ? (
+                <div className="leads2-list-card">
                     <div className="empty-state">
                         <h3>No leads found</h3>
                         <p>No contacts are available for the configured stages.</p>
                     </div>
-                ) : (
-                    <div className="stage2-accordion-list">
-                        {stageGroups.map((stageGroup) => {
-                            const isStageOpen = openStageKey === stageGroup.key;
-                            const leadCategoryCounts = stageGroup.contacts.reduce(
-                                (acc, contact) => {
-                                    const normalizedCategory = String(contact?.lead_category || '').trim().toLowerCase();
-                                    if (normalizedCategory === 'hot') acc.hot += 1;
-                                    if (normalizedCategory === 'warm') acc.warm += 1;
-                                    if (normalizedCategory === 'cold') acc.cold += 1;
-                                    return acc;
-                                },
-                                { hot: 0, warm: 0, cold: 0 }
-                            );
-                            const stageCategoryItems = [];
+                </div>
+            ) : (
+                <div className="stages-board" aria-label="Stage board">
+                    {stageGroups.map((stageGroup) => {
+                        const stageLabel = stageGroup.label || 'Untitled Stage';
+                        const isCollapsed = !!collapsedStageMap[stageGroup.key];
 
-                            if (leadCategoryCounts.hot > 0) {
-                                stageCategoryItems.push({ key: 'hot', label: '🔥 Hot', count: leadCategoryCounts.hot });
-                            }
-                            if (leadCategoryCounts.warm > 0) {
-                                stageCategoryItems.push({ key: 'warm', label: '🟡 Warm', count: leadCategoryCounts.warm });
-                            }
-                            if (leadCategoryCounts.cold > 0) {
-                                stageCategoryItems.push({ key: 'cold', label: '🔵 Cold', count: leadCategoryCounts.cold });
-                            }
-
-                            return (
-                                <div key={stageGroup.key} className="stage2-accordion-item">
-                                    <button
-                                        type="button"
-                                        className="stage2-accordion-header"
-                                        onClick={() => handleToggleStageAccordion(stageGroup.key)}
-                                    >
-                                        <div className="stage2-main-info">
-                                            <span className="stage2-name">{stageGroup.label} ({stageGroup.contacts.length})</span>
-                                            {stageGroup.contacts.length > 0 && stageCategoryItems.length > 0 && (
-                                                <>
-                                                    <span className="stage2-divider">|</span>
-                                                    {stageCategoryItems.map((item, index) => (
-                                                        <React.Fragment key={item.key}>
-                                                            {index > 0 && <span className="stage2-divider">|</span>}
-                                                            <span className="stage2-category-count">{item.label} ({item.count})</span>
-                                                        </React.Fragment>
-                                                    ))}
-                                                </>
-                                            )}
-                                        </div>
-                                        <span className="stage2-accordion-icon">{isStageOpen ? <FaChevronUp /> : <FaChevronDown />}</span>
-                                    </button>
-
-                                    {isStageOpen && (
-                                        <div className="stage2-accordion-body">
-                                            {stageGroup.contacts.length === 0 ? (
-                                                <div className="stage2-empty">No leads in this stage.</div>
-                                            ) : viewMode === 'card' ? (
-                                                <div className="lead2-cards-grid">
-                                                    {stageGroup.contacts.map((contact) => {
-                                                        const contactId = contact._id || contact.id;
-                                                        const fullName = getContactFullName(contact);
-                                                        const createdOn = formatDateDDMMYYYY(contact.createdAt || contact.created_at);
-                                                        const leadCategory = formatLeadCategory(contact.lead_category);
-
-                                                        return (
-                                                            <div key={contactId} className="lead2-card-item">
-                                                                <h3 className="lead2-card-title">{createdOn} | {fullName || 'n/a'}</h3>
-                                                                <div className="lead2-card-lines">
-                                                                    <p className="lead2-line"><strong>Email:</strong> {contact.email || 'n/a'}</p>
-                                                                    <p className="lead2-line"><strong>Phone:</strong> {contact.phone || 'n/a'} | {leadCategory}</p>
-                                                                </div>
-
-                                                                <div className="lead2-actions">
-                                                                    <button
-                                                                        type="button"
-                                                                        className="btn-primary"
-                                                                        onClick={() => handleMessageClick(contactId)}
-                                                                    >
-                                                                        <FaCommentDots /> Send Message
-                                                                    </button>
-                                                                    <button
-                                                                        type="button"
-                                                                        className="btn-secondary"
-                                                                        onClick={() => handleEditClick(contactId)}
-                                                                    >
-                                                                        <FaEdit /> Edit Contact
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        );
-                                                    })}
+                        return (
+                            <section key={stageGroup.key} className={`stage-board-column ${isCollapsed ? 'is-collapsed' : ''}`}>
+                                <header className="stage-board-column-header">
+                                    {isCollapsed ? (
+                                        <>
+                                            <button
+                                                type="button"
+                                                className="stage-board-collapse-btn"
+                                                aria-label={`Expand ${stageLabel} stage`}
+                                                onClick={() => handleToggleStageColumn(stageGroup.key)}
+                                            >
+                                                +
+                                            </button>
+                                            <div className="stage-board-collapsed-label">
+                                                {stageLabel} ({stageGroup.contacts.length})
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <div className="stage-board-title-row">
+                                                <h3>{stageLabel}</h3>
+                                                <div className="stage-board-title-tools">
+                                                    <span>{stageGroup.contacts.length}</span>
+                                                    <button
+                                                        type="button"
+                                                        className="stage-board-collapse-btn"
+                                                        aria-label={`Collapse ${stageLabel} stage`}
+                                                        onClick={() => handleToggleStageColumn(stageGroup.key)}
+                                                    >
+                                                        -
+                                                    </button>
                                                 </div>
-                                            ) : (
-                                                <div className="lead2-accordion-list">
-                                                    {stageGroup.contacts.map((contact) => {
-                                                        const contactId = contact._id || contact.id;
-                                                        const isLeadOpen = openContactMap[stageGroup.key] === contactId;
-                                                        const fullName = getContactFullName(contact);
-                                                        const createdOn = formatDateDDMMYYYY(contact.createdAt || contact.created_at);
-                                                        const leadCategory = formatLeadCategory(contact.lead_category);
-                                                        const contactIdString = getIdString(contactId);
-                                                        const insights = contactInsightsMap[contactIdString] || {};
-                                                        const currentStage = resolveContactStage(contact);
-                                                        const activeStages = stagesArray.filter((stage) => stage.status === 'active' || !stage.status);
-                                                        const selectedStageId = currentStage.key;
+                                            </div>
+                                            <div className="stage-board-progress">
+                                                <span
+                                                    style={{
+                                                        width: `${Math.min(100, Math.max(12, stageGroup.contacts.length * 14))}%`,
+                                                    }}
+                                                ></span>
+                                            </div>
+                                        </>
+                                    )}
+                                </header>
 
-                                                        return (
-                                                            <div key={contactId} className="lead2-accordion-item">
+                                {!isCollapsed && (
+                                    <div className="stage-board-cards">
+                                        {stageGroup.contacts.length === 0 ? (
+                                            <div className="stage-board-empty">No leads in this stage.</div>
+                                        ) : (
+                                            stageGroup.contacts.map((contact) => {
+                                                const contactId = contact._id || contact.id;
+                                                const fullName = getContactFullName(contact) || 'N/A';
+                                                const createdAt = contact.createdAt || contact.created_at;
+                                                const ageLabel = getRelativeAgeLabel(createdAt);
+                                                const leadCategoryBadge = getLeadCategoryBadge(contact.lead_category);
+
+                                                return (
+                                                    <article
+                                                        key={contactId}
+                                                        className="stage-board-card"
+                                                        role="button"
+                                                        tabIndex={0}
+                                                        aria-label={`Open ${fullName} messages`}
+                                                        onClick={() => handleMessageClick(contactId)}
+                                                        onKeyDown={(event) => {
+                                                            if (event.key === 'Enter' || event.key === ' ') {
+                                                                event.preventDefault();
+                                                                handleMessageClick(contactId);
+                                                            }
+                                                        }}
+                                                    >
+                                                        <h4 className="stage-board-card-title">{fullName}</h4>
+                                                        <p className="stage-board-card-subline">{contact.org_name || 'TSM Miscellaneous'}</p>
+                                                        <p className="stage-board-card-subline">{contact.designation || 'Development'}</p>
+                                                        <p className="stage-board-card-age">{ageLabel}</p>
+
+                                                        <div className="stage-board-card-footer">
+                                                            <div className="stage-board-card-actions">
                                                                 <button
                                                                     type="button"
-                                                                    className="lead2-accordion-header"
-                                                                    onClick={() => handleToggleLeadAccordion(stageGroup.key, contactId)}
+                                                                    className="stage-board-icon-btn"
+                                                                    aria-label="Send message"
+                                                                    onClick={(event) => {
+                                                                        event.stopPropagation();
+                                                                        handleMessageClick(contactId);
+                                                                    }}
                                                                 >
-                                                                    <div className="lead2-main-info">
-                                                                        <span className="lead2-name">{createdOn} | {fullName || 'n/a'}</span>
-                                                                        <span className="lead2-meta">
-                                                                            <FaEnvelope /> {contact.email || 'n/a'}
-                                                                        </span>
-                                                                        <span className="lead2-meta">
-                                                                            <FaPhone /> {contact.phone || 'n/a'} | {leadCategory}
-                                                                        </span>
-                                                                    </div>
-                                                                    <span className="lead2-accordion-icon">{isLeadOpen ? <FaChevronUp /> : <FaChevronDown />}</span>
+                                                                    <FaCommentDots />
                                                                 </button>
-
-                                                                {isLeadOpen && (
-                                                                    <div className="lead2-accordion-body">
-                                                                        <div className="lead2-columns-grid">
-                                                                            <div className="lead2-column">
-                                                                                <h4>Personal Details</h4>
-                                                                                <ul className="lead2-column-list">
-                                                                                    <li><strong>Name:</strong> {fullName || 'n/a'}</li>
-                                                                                    <li><strong>Email:</strong> {contact.email || 'n/a'}</li>
-                                                                                    <li><strong>Phone:</strong> {contact.phone || 'n/a'}</li>
-                                                                                    <li><strong>Lead Category:</strong> {leadCategory}</li>
-                                                                                </ul>
-                                                                            </div>
-
-                                                                            <div className="lead2-column">
-                                                                                <h4>Log Notes</h4>
-                                                                                {insights.loading ? (
-                                                                                    <p className="lead2-column-text">Loading...</p>
-                                                                                ) : Array.isArray(insights.logNotes) && insights.logNotes.length > 0 ? (
-                                                                                    <ul className="lead2-notes-list">
-                                                                                        {insights.logNotes.map((noteItem) => (
-                                                                                            <li key={noteItem._id || `${noteItem.message}-${noteItem.createdAt || noteItem.created_at}`}>
-                                                                                                <span className="lead2-note-text">{noteItem.message || 'N/A'}</span>
-                                                                                                <span className="lead2-note-time"> {formatLogNoteDateTime(noteItem.createdAt || noteItem.created_at)}</span>
-                                                                                            </li>
-                                                                                        ))}
-                                                                                    </ul>
-                                                                                ) : (
-                                                                                    <p className="lead2-column-text">No log note found</p>
-                                                                                )}
-                                                                            </div>
-
-                                                                            <div className="lead2-column">
-                                                                                <h4>Call Tracker</h4>
-                                                                                {insights.loading ? (
-                                                                                    <p className="lead2-column-text">Loading...</p>
-                                                                                ) : Array.isArray(insights.callTrackers) && insights.callTrackers.length > 0 ? (
-                                                                                    <ul className="lead2-tracker-list">
-                                                                                        {insights.callTrackers.map((trackerItem) => (
-                                                                                            <li key={trackerItem._id || `${trackerItem.message}-${trackerItem.createdAt || trackerItem.created_at}`} className="lead2-tracker-item">
-                                                                                                <p className="lead2-tracker-head">
-                                                                                                    {formatActivityType(trackerItem.activity_type)} - {formatLogNoteDateTime(trackerItem.due_date || trackerItem.createdAt || trackerItem.created_at)}
-                                                                                                </p>
-                                                                                                <p className="lead2-tracker-detail">{trackerItem.message || 'N/A'}</p>
-                                                                                            </li>
-                                                                                        ))}
-                                                                                    </ul>
-                                                                                ) : (
-                                                                                    <p className="lead2-column-text">No call tracker found</p>
-                                                                                )}
-                                                                            </div>
-
-                                                                            <div className="lead2-column">
-                                                                                <h4>Stays In Stage</h4>
-                                                                                <div className="lead2-column-stack">
-                                                                                    <p className="lead2-column-text">{getDaysInCurrentStage(contactIdString)}</p>
-                                                                                    <small>Current: {currentStage.label}</small>
-                                                                                </div>
-                                                                            </div>
-
-                                                                            <div className="lead2-column">
-                                                                                <h4>Actions</h4>
-                                                                                <label className="lead2-shift-label">Shift to:</label>
-                                                                                <div className="lead2-shift-row">
-                                                                                    <select
-                                                                                        className="lead2-shift-select"
-                                                                                        value={selectedStageId}
-                                                                                        disabled={!!shiftingContactMap[contactIdString]}
-                                                                                        onChange={(event) => {
-                                                                                            const nextStageId = event.target.value;
-                                                                                            handleRequestStageShift(contact, nextStageId);
-                                                                                        }}
-                                                                                    >
-                                                                                        {activeStages.map((stage) => {
-                                                                                            const stageId = getIdString(stage._id || stage.id);
-                                                                                            return (
-                                                                                                <option key={stageId} value={stageId}>
-                                                                                                    {stage.name || stage.stage_name || stage.title || 'Unnamed Stage'}
-                                                                                                </option>
-                                                                                            );
-                                                                                        })}
-                                                                                    </select>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-
-                                                                        <div className="lead2-actions">
-                                                                            <button
-                                                                                type="button"
-                                                                                className="btn-primary"
-                                                                                onClick={() => handleMessageClick(contactId)}
-                                                                            >
-                                                                                <FaCommentDots /> Send Message
-                                                                            </button>
-                                                                            <button
-                                                                                type="button"
-                                                                                className="btn-secondary"
-                                                                                onClick={() => handleEditClick(contactId)}
-                                                                            >
-                                                                                <FaEdit /> Edit Contact
-                                                                            </button>
-                                                                        </div>
-                                                                    </div>
-                                                                )}
                                                             </div>
-                                                        );
-                                                    })}
-                                                </div>
-                                            )}
-                                        </div>
-                                    )}
-                                </div>
-                            );
-                        })}
-                    </div>
-                )}
-            </div>
+                                                            <span className={`stage-board-lead-category ${leadCategoryBadge.className}`}>
+                                                                {leadCategoryBadge.text}
+                                                            </span>
+                                                        </div>
+                                                    </article>
+                                                );
+                                            })
+                                        )}
+                                    </div>
+                                )}
+                            </section>
+                        );
+                    })}
+                </div>
+            )}
 
             {pendingStageChange && (
                 <div className="lead2-modal-overlay" onClick={() => setPendingStageChange(null)}>
