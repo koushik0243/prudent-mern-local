@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { fetchCountries, deleteCountry } from "@/redux/slices/countrySlice";
 import toast from 'react-hot-toast';
 import { FaSearch, FaGlobe, FaPlus, FaTrash, FaEdit } from 'react-icons/fa';
-import '../TagManagers/ListTagManagers.css';
+import './ListCountries.css';
 
 const ListCountries = () => {
     const router = useRouter();

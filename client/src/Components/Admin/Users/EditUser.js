@@ -145,7 +145,7 @@ const EditUser = ({ id }) => {
     }
 
     return (
-        <div className="show-contact-container">
+        <div className="show-contact-container edit-user-page">
             <div className="show-contact-header">
                 <button className="btn-back" onClick={handleCancel}>
                     <FaArrowLeft /> Back to Users

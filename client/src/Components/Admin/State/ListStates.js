@@ -7,7 +7,7 @@ import { fetchStates, deleteState } from "@/redux/slices/stateSlice";
 import { fetchCountries } from "@/redux/slices/countrySlice";
 import toast from 'react-hot-toast';
 import { FaMapMarkedAlt, FaPlus, FaTrash, FaEdit } from 'react-icons/fa';
-import '../TagManagers/ListTagManagers.css';
+import './ListStates.css';
 
 const ListStates = () => {
     const router = useRouter();

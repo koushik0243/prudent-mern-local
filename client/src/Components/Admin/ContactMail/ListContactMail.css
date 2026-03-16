@@ -1,0 +1,6 @@
+/* Contact Mail list page styles */
+@import '../TagManagers/ListTagManagers.css';
+
+.list-contacts-container {
+    margin-top: 50px !important;
+}

@@ -9,7 +9,7 @@ import { fetchContactMails } from '@/redux/slices/contactMailSlice';
 import { fetchContactMailSends, deleteContactMailSend } from '@/redux/slices/contactMailSendSlice';
 import toast from 'react-hot-toast';
 import { FaSearch, FaEnvelope, FaPlus, FaTrash, FaEye } from 'react-icons/fa';
-import '../TagManagers/ListTagManagers.css';
+import './ListContactMailSend.css';
 
 const ListContactMailSend = () => {
     const router = useRouter();

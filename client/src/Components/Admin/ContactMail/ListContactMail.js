@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { fetchContactMails, deleteContactMail } from "@/redux/slices/contactMailSlice";
 import toast from 'react-hot-toast';
 import { FaSearch, FaEnvelope, FaPlus, FaTrash, FaEdit, FaEye } from 'react-icons/fa';
-import '../TagManagers/ListTagManagers.css';
+import './ListContactMail.css';
 
 const ListContactMail = () => {
     const router = useRouter();
@@ -25,10 +25,11 @@ const ListContactMail = () => {
         if (loading || (Array.isArray(contactMails) && contactMails.length > 0)) return;
 
         const loadContactMails = async () => {
-            try {
-                await dispatch(fetchContactMails()).unwrap();
-            } catch (err) {
-                console.error('Error loading contact mails:', err);
+            const resultAction = await dispatch(fetchContactMails());
+
+            // Ignore expected condition-aborts (already loading or TTL hit).
+            if (fetchContactMails.rejected.match(resultAction) && !resultAction.meta?.condition) {
+                console.error('Error loading contact mails:', resultAction.payload || resultAction.error?.message);
             }
         };
         loadContactMails();
